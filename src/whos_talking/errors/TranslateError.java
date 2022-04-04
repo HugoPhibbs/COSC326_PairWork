@@ -1,4 +1,4 @@
-package whos_talking;
+package whos_talking.errors;
 
 /**
  * Class to represent an error when a user enters in invalid input when using the Translate program
@@ -10,7 +10,7 @@ public class TranslateError extends Exception {
      *
      * @param msg String for the error message to be displayed to a user
      */
-    TranslateError(String msg) {
+    public TranslateError(String msg) {
         super(msg);
     }
 
