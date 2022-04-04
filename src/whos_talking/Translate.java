@@ -1,10 +1,11 @@
 package whos_talking;
+import whos_talking.errors.PronounError;
+import whos_talking.errors.TranslateError;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 import static java.util.Map.entry;
-import java.util.Scanner;
 
 /**
  * Class to translate input of simple English Sentences into Maori
@@ -33,7 +34,7 @@ public class Translate{
         createMaps();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new Translate().start();
     }
 
@@ -65,7 +66,7 @@ public class Translate{
     private ArrayList<String> getInput() {
         System.out.println("Welcome to Translator\nEnter one English phrase per line\nHit enter on an empty line to submit");
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> phrases = new ArrayList<String>();
+        ArrayList<String> phrases = new ArrayList<>();
         String phrase = scanner.nextLine();
         while (!phrase.equals("")) {
             phrases.add(phrase);
@@ -101,7 +102,7 @@ public class Translate{
      */
     public String translatePhraseHelper(String phrase) throws TranslateError{
         ArrayList<String> phraseParts = phraseToParts(phrase);
-        return translateParts(phraseParts);
+        return translateParts(phraseParts.get(0), phraseParts.get(1));
     }
 
     /**
@@ -148,7 +149,18 @@ public class Translate{
 
     }
 
-    private String translateParts(ArrayList<String> phrase) {
+    /**
+     * Translates the parts of an English phrase to Maori
+     *
+     * @param pronounClause String for an English pronoun clause
+     * @param verbClause String for an English verb clause
+     * @return String for the inputted clauses combined into a coherent Maori sentence
+     * @throws TranslateError if the inputted clauses could not be translated to Maori
+     */
+    private String translateParts(String pronounClause, String verbClause) throws TranslateError {
+        String pronoun = translatePronounClause(pronounClause);
+        // Now get verb clause
+        // return constructMaoriSentence(tenseMarker, verb, pronoun);
         return null;
         // Translate pronoun clause
         // Translate verb clause
@@ -159,9 +171,44 @@ public class Translate{
         // Then this makes adding the results easy. Up to you Ben, don't want to micromanage ur part.
     }
 
-    private String translatePronounClause(String pronounClause) {
-        // TODO
-        return "";
+    /**
+     * Construct a Maori sentence from inputted Maori words
+     *
+     * @param tenseMarker String for the tense marker of a sentence
+     * @param verb String for the verb of a sentence
+     * @param pronoun String for the pronoun of a sentence
+     * @return String for a constructed Maori sentence
+     */
+    private String constructMaoriSentence(String tenseMarker, String verb, String pronoun) {
+        return String.format("%s %s %s", tenseMarker, verb, pronoun);
+    }
+
+    /**
+     * Translates a Pronoun clause in English to Maori
+     *
+     * @param pronounClause String for a pronoun clause
+     * @throws PronounError if the inputted pronounClause could not be translated to Maori
+     * @return String for a Maori translation of the inputted English pronoun clause
+     */
+    private String translatePronounClause(String pronounClause) throws PronounError {
+        checkPronounClause(pronounClause);
+        assert pronounMap.containsKey(pronounClause): "Pronoun should be valid";
+        return pronounMap.get(pronounClause);
+    }
+
+    /**
+     * Runs checks on an inputted pronoun clause
+     *
+     * @param pronounClause String for an inputted pronoun clause from a user
+     * @throws PronounError if the inputted pronoun clause is invalid
+     */
+    private void checkPronounClause(String pronounClause) throws PronounError{
+        if (!pronounMap.containsKey(pronounClause)) {
+            if (pronounMap.containsKey(capitalizeString(pronounClause))) {
+                throw new PronounError("Pronoun should be capitalized");
+            }
+            throw new PronounError("Pronoun is not valid");
+        }
     }
 
     private String translateVerbClause(String verbClause) {
@@ -222,4 +269,32 @@ public class Translate{
         tenseMap.put("Present", "Kei te");
         tenseMap.put("Future", "Ka");
     }
+
+    // Utility Methods
+
+    /**
+     * Capitalizes a String, all characters following the first are put into lower case
+     *
+     * @param str String to be capitalized
+     * @return A capitalized String
+     */
+    private String capitalizeString(String str) {
+        if (str.length() == 0){
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1).toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * Checks if a string is capitalized or not
+     *
+     * Check capitalizeString(String) for my definition for a capitalized String
+     *
+     * @param str String as described
+     * @return boolean as described
+     */
+    private boolean stringIsCapitalized(String str) {
+        return (str.equals(this.capitalizeString(str)));
+    }
+
 }
