@@ -1,8 +1,8 @@
 package whos_talking;
+import whos_talking.errors.PhraseLengthError;
 import whos_talking.errors.PronounError;
 import whos_talking.errors.TranslateError;
 
-import java.io.IOException;
 import java.util.*;
 
 import static java.util.Map.entry;
@@ -83,7 +83,7 @@ public class Translate{
      * @param phrase String for an English phrase
      * @return String for a Maori phrase as described
      */
-    private String translatePhrase(String phrase) {
+    public String translatePhrase(String phrase) {
         try {
             return translatePhraseHelper(phrase);
         } catch (TranslateError te) {
@@ -101,8 +101,25 @@ public class Translate{
      * @throws TranslateError if the inputted phrase could not be translated
      */
     public String translatePhraseHelper(String phrase) throws TranslateError{
+        preTranslateChecks(phrase);
         ArrayList<String> phraseParts = phraseToParts(phrase);
         return translateParts(phraseParts.get(0), phraseParts.get(1));
+    }
+
+    /**
+     * Performs pre parse checks before attempting to translate a phrase.
+     *
+     * Makes sure that a phrase isn't completely irrelevant before attempting to translate
+     *
+     * @param phrase String for an entered phrase from a user
+     */
+    private void preTranslateChecks(String phrase) {
+        if (phrase == null) {
+            throw new IllegalArgumentException("Phrase cannot be null!");
+        }
+        else if (phrase.equals("")) {
+            throw new IllegalArgumentException("Phrase cannot be empty!");
+        }
     }
 
     /**
@@ -112,39 +129,90 @@ public class Translate{
      * @return ArrayList for the parts of the phrase. First element is the pronoun clause, and the second is the verb clause
      */
     private ArrayList<String> phraseToParts(String phrase) throws TranslateError {
-        String[] splitPhrase = phrase.split(" ");
+        String[] splitPhrase = splitPhrase(phrase);
         checkSplitPhraseLength(splitPhrase);
         ArrayList<String> phraseParts = new ArrayList<>();
         switch (splitPhrase.length) {
-            case 2 -> {
-                phraseParts.add(splitPhrase[0]);
-                phraseParts.add(splitPhrase[1]);
-            }
-            case 3 -> {
-                phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
-                phraseParts.add(splitPhrase[2]);
-            }
-            case 4 -> {
-                phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
-                phraseParts.add(splitPhrase[2] + ' ' + splitPhrase[3]);
-            }
+            case 2 -> {handlePhraseLengthOf2(phraseParts, splitPhrase);}
+            case 3 -> {handlePhraseLengthOf3(phraseParts, splitPhrase);}
+            case 4 -> {handlePhraseLengthOf4(phraseParts, splitPhrase);}
             default -> throw new IllegalStateException("Split phrase length is invalid!");
         }
         return phraseParts;
     }
 
     /**
+     * Handles case where a split phrase has a length of 3
+     *
+     * @param phraseParts Empty arraylist that the parts of phrase are to be added to
+     * @param splitPhrase String array for an array split into its words (including a pronoun specifier)
+     */
+    private void handlePhraseLengthOf3(ArrayList<String> phraseParts, String[] splitPhrase) {
+        assert splitPhrase.length == 3: "Split phrase must have a length of 3";
+        assert phraseParts.size() == 0: "Phrase parts must be empty";
+        if (splitPhrase[1].startsWith("(") && splitPhrase[1].endsWith(")")) {
+            phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
+            phraseParts.add(splitPhrase[2]);
+        }
+        else {
+            phraseParts.add(splitPhrase[0]);
+            phraseParts.add(splitPhrase[1] + ' '+ splitPhrase[2]);
+        }
+    }
+
+    /**
+     * Handles case where a split phrase has a length of 2
+     *
+     * @param phraseParts Empty arraylist that the parts of phrase are to be added to
+     * @param splitPhrase String array for an array split into its words (including a pronoun specifier)
+     */
+    private void handlePhraseLengthOf2(ArrayList<String> phraseParts, String[] splitPhrase) {
+        phraseParts.add(splitPhrase[0]);
+        phraseParts.add(splitPhrase[1]);
+    }
+
+    /**
+     * Handles case where a split phrase has a length of 4
+     *
+     * @param phraseParts Empty arraylist that the parts of phrase are to be added to
+     * @param splitPhrase String array for an array split into its words (including a pronoun specifier)
+     */
+    private void handlePhraseLengthOf4(ArrayList<String> phraseParts, String[] splitPhrase) {
+        phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
+        phraseParts.add(splitPhrase[2] + ' ' + splitPhrase[3]);
+    }
+
+    /**
+     * Splits a phrase into its words. Including any specifier on a pronoun
+     *
+     * @return String array containing phrase parts as described
+     */
+    private String[] splitPhrase(String phrase) {
+        assert phrase != null: "Phrase cannot be null!";
+        ArrayList<String> splitPhrase = new ArrayList<>(Arrays.asList((phrase.split(" "))));
+        if (splitPhrase.size() >= 3) {
+            if (splitPhrase.get(1).startsWith("(") & splitPhrase.get(2).endsWith(")")) {
+                String pronoun_specifier = String.format("%s %s", splitPhrase.get(1), splitPhrase.get(2));
+                splitPhrase.remove(1);
+                splitPhrase.remove(1);
+                splitPhrase.add(1, pronoun_specifier);
+            }
+        }
+        return splitPhrase.toArray(new String[0]);
+    }
+
+    /**
      * Checks the length of a phrase is too long or too short.
      *
      * @param splitPhrase String[] for a split phrase from a user
-     * @throws TranslateError if the inputted phr
+     * @throws PhraseLengthError if the inputted phrase is too long or short
      */
-    private void checkSplitPhraseLength(String[] splitPhrase) throws TranslateError {
+    private void checkSplitPhraseLength(String[] splitPhrase) throws PhraseLengthError {
         if (splitPhrase.length > 4) {
-            throw new TranslateError("Phrase length is too long");
+            throw new PhraseLengthError("Phrase length is too long");
         }
         else if (splitPhrase.length < 2) {
-            throw new TranslateError("Phrase length is too short");
+            throw new PhraseLengthError("Phrase length is too short");
         }
 
     }
@@ -226,20 +294,23 @@ public class Translate{
         createTenseMap();
     }
 
+    /**
+     * Creates a HashMap that is used to map English to Maori pronouns
+     */
     private void createPronounMap() {
         pronounMap = new HashMap<>(Map.ofEntries(
                 entry("I", "au"),
-                entry("he",  "ia"),
-                entry("she", "ia"),
-                entry("they (2 excl)", "rāua"),
-                entry("they (3 excl)", "rātou"),
-                entry("we (2 incl)", "tāua"),
-                entry("we (3 incl)", "tātou"),
-                entry("we (2 excl)", "māua"),
-                entry("we (3 excl)", "mātou"),
-                entry("you (3 excl)", "koutou"),
-                entry("you (2 excl)", "kōrua"),
-                entry("you (1 excl)", "koe")
+                entry("He",  "ia"),
+                entry("She", "ia"),
+                entry("They (2 excl)", "rāua"),
+                entry("They (3 excl)", "rātou"),
+                entry("We (2 incl)", "tāua"),
+                entry("We (3 incl)", "tātou"),
+                entry("We (2 excl)", "māua"),
+                entry("We (3 excl)", "mātou"),
+                entry("You (3 excl)", "koutou"),
+                entry("You (2 excl)", "kōrua"),
+                entry("You (1 excl)", "koe")
         ));
     }
     
