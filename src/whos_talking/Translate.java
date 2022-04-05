@@ -249,22 +249,6 @@ public class Translate {
         String maoriVerb = translateVerbClause(verbClause);
         String maoriTenseMarker = translateTenseClause(verbClause);
         return constructMaoriSentence(maoriTenseMarker, maoriVerb, maoriPronoun);
-
-
-
-        // Now get verb clause
-        // return constructMaoriSentence(tenseMarker, verb, pronoun);
-        
-        // Translate pronoun clause
-        // Translate verb clause
-        // Add results together TODO how to do this, given that tense is given at the
-        // start of a maori sentence?
-
-        // Could break the maori phrase into Marker-Pronoun-Verb.
-        // Verb clause could return the marker and verb? - in the form of String
-        // array/ArrayList
-        // Then this makes adding the results easy. Up to you Ben, don't want to
-        // micromanage ur part.
     }
 
     /**
@@ -290,7 +274,7 @@ public class Translate {
     private String translatePronounClause(String pronounClause) throws PronounError {
         checkPronounClause(pronounClause);
         assert pronounMap.containsKey(pronounClause) : "Pronoun should be valid";
-        return pronounMap.get(pronounClause);
+        return pronounMap.get(pronounClause); 
     }
 
     /**
@@ -315,8 +299,11 @@ public class Translate {
      * @return string translated from english.
      */
 
-    private String translateVerbClause(String verbClause) {
-        assert verbMap.containsKey(verbClause) : "verb invalid";
+    private String translateVerbClause(String verbClause) throws TranslateError {
+        if(!verbMap.containsKey(verbClause)){
+            throw new TranslateError("Verb non valid.");
+        }
+   
         return verbMap.get(verbClause);
     }
     /**
@@ -326,8 +313,10 @@ public class Translate {
      * @return string translated from english.
      */
 
-    private String translateTenseClause(String verbClause) {
-        assert tenseMap.containsKey(verbClause) : "Tense unkown or not valid (Check if in map)";
+    private String translateTenseClause(String verbClause) throws TranslateError {
+        if(!tenseMap.containsKey((verbClause))){
+            throw new TranslateError("verb clause not vailid for tense.");
+        }
         return tenseMap.get(verbClause);
     }
     // Creating Class HashMap attributes
