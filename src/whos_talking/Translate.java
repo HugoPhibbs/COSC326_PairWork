@@ -262,15 +262,6 @@ public class Translate{
      * Creates the HashMaps used for translating English to Maori phrases
      */
     private void createMaps() {
-        createPronounMap();
-        createVerbMap();
-        createTenseMap();
-    }
-
-    /**
-     * Creates a HashMap that is used to map English to Maori pronouns
-     */
-    private void createPronounMap() {
         pronounMap = new HashMap<>(Map.ofEntries(
                 entry("I", "au"),
                 entry("He",  "ia"),
@@ -285,13 +276,7 @@ public class Translate{
                 entry("You (2 excl)", "kōrua"),
                 entry("You (1 excl)", "koe")
         ));
-    }
-    
-    /**
-     * Creates the verb map used for translation from english to maori
-     *
-     */
-    private void createVerbMap() {
+
         verbMap = new HashMap<>();
         verbMap.put("go","haere");
         verbMap.put("make","hanga");
@@ -301,13 +286,7 @@ public class Translate{
         verbMap.put("ask","pātai");
         verbMap.put("read","pānui");
         verbMap.put("learn","ako");
-    }
 
-    /**
-     * Creates a HashMap that maps English tenses to Maori tense markers
-     *
-     */
-    private void createTenseMap() {
         tenseMap = new HashMap<>();
         tenseMap.put("Past", "I");
         tenseMap.put("Present", "Kei te");
