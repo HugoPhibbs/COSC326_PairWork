@@ -133,9 +133,17 @@ public class Translate{
         checkSplitPhraseLength(splitPhrase);
         ArrayList<String> phraseParts = new ArrayList<>();
         switch (splitPhrase.length) {
-            case 2 -> {handlePhraseLengthOf2(phraseParts, splitPhrase);}
-            case 3 -> {handlePhraseLengthOf3(phraseParts, splitPhrase);}
-            case 4 -> {handlePhraseLengthOf4(phraseParts, splitPhrase);}
+            case 2 -> {
+                phraseParts.add(splitPhrase[0]);
+                phraseParts.add(splitPhrase[1]);
+            }
+            case 3 -> {
+                handlePhraseLengthOf3(phraseParts, splitPhrase);
+            }
+            case 4 -> {
+                phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
+                phraseParts.add(splitPhrase[2] + ' ' + splitPhrase[3]);
+            }
             default -> throw new IllegalStateException("Split phrase length is invalid!");
         }
         return phraseParts;
@@ -158,28 +166,6 @@ public class Translate{
             phraseParts.add(splitPhrase[0]);
             phraseParts.add(splitPhrase[1] + ' '+ splitPhrase[2]);
         }
-    }
-
-    /**
-     * Handles case where a split phrase has a length of 2
-     *
-     * @param phraseParts Empty arraylist that the parts of phrase are to be added to
-     * @param splitPhrase String array for an array split into its words (including a pronoun specifier)
-     */
-    private void handlePhraseLengthOf2(ArrayList<String> phraseParts, String[] splitPhrase) {
-        phraseParts.add(splitPhrase[0]);
-        phraseParts.add(splitPhrase[1]);
-    }
-
-    /**
-     * Handles case where a split phrase has a length of 4
-     *
-     * @param phraseParts Empty arraylist that the parts of phrase are to be added to
-     * @param splitPhrase String array for an array split into its words (including a pronoun specifier)
-     */
-    private void handlePhraseLengthOf4(ArrayList<String> phraseParts, String[] splitPhrase) {
-        phraseParts.add(splitPhrase[0] + ' ' + splitPhrase[1]);
-        phraseParts.add(splitPhrase[2] + ' ' + splitPhrase[3]);
     }
 
     /**
@@ -214,7 +200,6 @@ public class Translate{
         else if (splitPhrase.length < 2) {
             throw new PhraseLengthError("Phrase length is too short");
         }
-
     }
 
     /**
@@ -228,7 +213,7 @@ public class Translate{
     private String translateParts(String pronounClause, String verbClause) throws TranslateError {
         String pronoun = translatePronounClause(pronounClause);
         // Now get verb clause
-        // return constructMaoriSentence(tenseMarker, verb, pronoun);
+        // return String.format("%s %s %s", tenseMarker, verb, pronoun);
         return null;
         // Translate pronoun clause
         // Translate verb clause
@@ -237,18 +222,6 @@ public class Translate{
         // Could break the maori phrase into Marker-Pronoun-Verb.
         // Verb clause could return the marker and verb? -  in the form of String array/ArrayList
         // Then this makes adding the results easy. Up to you Ben, don't want to micromanage ur part.
-    }
-
-    /**
-     * Construct a Maori sentence from inputted Maori words
-     *
-     * @param tenseMarker String for the tense marker of a sentence
-     * @param verb String for the verb of a sentence
-     * @param pronoun String for the pronoun of a sentence
-     * @return String for a constructed Maori sentence
-     */
-    private String constructMaoriSentence(String tenseMarker, String verb, String pronoun) {
-        return String.format("%s %s %s", tenseMarker, verb, pronoun);
     }
 
     /**
