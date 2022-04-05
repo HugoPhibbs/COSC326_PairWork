@@ -1,4 +1,4 @@
-package whos_talking;
+/*package whos_talking;
 
 import org.junit.Test;
 import whos_talking.errors.PhraseLengthError;
@@ -12,6 +12,7 @@ public class TranslateTest {
     /**
      * Translate object used for testing
      */
+    /*
     private final Translate translate = new Translate();
 
     @Test
@@ -52,3 +53,4 @@ public class TranslateTest {
         assertThrows(PhraseLengthError.class, () -> translate.translatePhraseHelper("He is slowly going away"));
     }
 }
+*/
