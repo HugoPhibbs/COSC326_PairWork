@@ -91,7 +91,7 @@ public class Translate {
         try {
             return translatePhraseHelper(phrase);
         } catch (TranslateError te) {
-            return te.getMessage();
+            return String.format("'%s' - %s", phrase, te.getMessage());
         }
     }
 
