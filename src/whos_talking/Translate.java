@@ -231,6 +231,7 @@ public class Translate {
         } else if (splitPhrase.length < 2) {
             throw new PhraseLengthError("Phrase length is too short");
         }
+
     }
 
     /**
@@ -324,6 +325,15 @@ public class Translate {
      * Creates the HashMaps used for translating English to Maori phrases
      */
     private void createMaps() {
+        createPronounMap();
+        createVerbMap();
+        createTenseMap();
+    }
+
+    /**
+     * Creates a HashMap that is used to map English to Maori pronouns
+     */
+    private void createPronounMap() {
         pronounMap = new HashMap<>(Map.ofEntries(
                 entry("I", "au"),
                 entry("He", "ia"),
@@ -399,6 +409,11 @@ public class Translate {
         verbMap.put("can learn", "ako");
     }
 
+    /**
+     * Creates a HashMap that maps English tenses to Maori tense markers
+     *
+     */
+    private void createTenseMap() {
         tenseMap = new HashMap<>();
         // go:
         tenseMap.put("go", "I"); //past
