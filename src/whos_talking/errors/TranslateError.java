@@ -6,7 +6,7 @@ package whos_talking.errors;
 public class TranslateError extends Exception {
 
     /**
-     * Constructor for an InvalidError
+     * Constructor for a TranslateError
      *
      * @param msg String for the error message to be displayed to a user
      */
@@ -22,4 +22,5 @@ public class TranslateError extends Exception {
     public String getMessage() {
         return String.format("Invalid: %s", super.getMessage());
     }
+
 }
