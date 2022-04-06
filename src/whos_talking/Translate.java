@@ -315,7 +315,7 @@ public class Translate {
 
     private String translateTenseClause(String verbClause) throws TranslateError {
         if(!tenseMap.containsKey((verbClause))){
-            throw new TranslateError("verb clause not vailid for tense.");
+            throw new TranslateError("Verb clause not valid for tense.");
         }
         return tenseMap.get(verbClause);
     }
@@ -356,7 +356,6 @@ public class Translate {
     private void createVerbMap() {
         verbMap = new HashMap<>();
         //go
-        verbMap.put("go", "haere");
         verbMap.put("go", "haere"); //past
         verbMap.put("are going", "haere");// future
         verbMap.put("am going", "haere");// future
@@ -399,7 +398,6 @@ public class Translate {
         verbMap.put("will read", "pānui"); //future 
         verbMap.put("reading", "pānui"); //present
         //learn
-        verbMap.put("learn", "ako");
         verbMap.put("learn", "ako");//present
         verbMap.put("learnt", "ako");// past
         verbMap.put("learned", "ako"); //past
