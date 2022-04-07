@@ -65,6 +65,5 @@ public class TranslateTest {
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3 excl) tooo make"));
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
     }
-
     
 }
