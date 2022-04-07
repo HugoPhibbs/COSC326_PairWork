@@ -8,8 +8,6 @@ import java.util.*;
 
 import static java.util.Map.entry;
 
-import java.time.format.TextStyle;
-
 /**
  * Class to translate input of simple English Sentences into Maori
  */
@@ -23,12 +21,9 @@ public class Translate {
     /**
      * HashMap mapping English verbs to Maori ones, plus their tenses
      */
-    private HashMap<String, String> verbMap;
+    private HashMap<String, String[]> verbMap;
 
-    /**
-     * HashMap containing English tenses with their Maori marker equivalents
-     */
-    private HashMap<String, String> tenseMap;
+ 
 
     /**
      * Constructor for a Translate object
@@ -246,9 +241,8 @@ public class Translate {
      */
     private String translateParts(String pronounClause, String verbClause) throws TranslateError {
         String maoriPronoun = translatePronounClause(pronounClause);
-        String maoriVerb = translateVerbClause(verbClause);
-        String maoriTenseMarker = translateTenseClause(verbClause);
-        return constructMaoriSentence(maoriTenseMarker, maoriVerb, maoriPronoun);
+        String[] tenseVerb = translateVerbClause(verbClause);
+        return constructMaoriSentence(tenseVerb[1], tenseVerb[0], maoriPronoun);
     }
 
     /**
@@ -299,35 +293,22 @@ public class Translate {
      * @return string translated from english.
      */
 
-    private String translateVerbClause(String verbClause) throws TranslateError {
+    private String[] translateVerbClause(String verbClause) throws TranslateError {
         if(!verbMap.containsKey(verbClause)){
             throw new TranslateError(verbClause, "Verb", "not recognized");
         }
-   
-        return verbMap.get(verbClause);
+        String[] verb = verbMap.get(verbClause);
+        return verb;
     }
-    /**
-     * translates verb clause to maori version. 
-     * 
-     * @param verbClause String for translation.
-     * @return string translated from english.
-     */
-    private String translateTenseClause(String verbClause) throws TranslateError {
-        if(!tenseMap.containsKey((verbClause))){
-            // TODO will this line ever actually be triggered?
-            throw new TranslateError(verbClause, "Verb", "tense not recognized");
-        }
-        return tenseMap.get(verbClause);
-    }
-    // Creating Class HashMap attributes
-
+    
+    // Creating Class HashMap attribute.
     /**
      * Creates the HashMaps used for translating English to Maori phrases
      */
     private void createMaps() {
         createPronounMap();
         createVerbMap();
-        createTenseMap();
+       
     }
 
     /**
@@ -354,117 +335,60 @@ public class Translate {
      *
      */
     private void createVerbMap() {
-        verbMap = new HashMap<>();
+        verbMap = new HashMap<String, String[]>();
         //go
-        verbMap.put("go", "haere"); //past
-        verbMap.put("are going", "haere");// future
-        verbMap.put("am going", "haere");// future
-        verbMap.put("going", "haere");// present 
-        verbMap.put("went", "haere");// past
-        verbMap.put("gone", "haere");// past
+        verbMap.put("go", new String[] {"haere", "Kei te"}); //present
+        verbMap.put("are going", new String[] {"haere", "Kei te"});// fpresent
+        verbMap.put("am going", new String[] {"haere", "Ka"});// future
+        verbMap.put("going", new String[] {"haere", "Kei te"});// present 
+        verbMap.put("went", new String[] {"haere", "I"});// past
+        verbMap.put("gone", new String[] {"haere", "I"});// past
         //make
-        verbMap.put("make", "hanga");
-        verbMap.put("to make", "hanga");// future
-        verbMap.put("made", "hanga");// past
-        verbMap.put("are making", "hanga"); // present
+        verbMap.put("make", new String[] {"hanga", "Ka"});
+        verbMap.put("to make", new String[] {"hanga", "Ka"});// future
+        verbMap.put("made", new String[] {"hanga", "I"});// past
+        verbMap.put("are making", new String[] {"hanga", "Kei te"}); // present
         //see
-        verbMap.put("see", "kite");
-        verbMap.put("seeing", "kite"); //present
-        verbMap.put("saw", "kite"); //past
-        verbMap.put("seen", "kite"); //past
-        verbMap.put("to see", "kite"); //future
-        verbMap.put("is seeing", "kite");// present
+        verbMap.put("see", new String[] {"kite", "Kei te"});
+        verbMap.put("seeing", new String[] {"kite", "Kei te"}); //present
+        verbMap.put("saw", new String[] {"kite" ,"I"}); //past
+        verbMap.put("seen", new String[] {"kite", "I"}); //past
+        verbMap.put("to see", new String[] {"kite", "Ka"}); //future
+        verbMap.put("is seeing",new String[] { "kite", "Kei te"});// present
         //want
-        verbMap.put("want", "hiahia");
-        verbMap.put("will want", "hiahia"); //future
-        verbMap.put("wanted", "hiahia"); // past
-        verbMap.put("am wanting", "hiahia"); //present
-        verbMap.put("was wanting", "hiahia");//past
+        verbMap.put("want",new String[] { "hiahia", "Kei te"});
+        verbMap.put("will want",new String[] { "hiahia", "Ka"}); //future
+        verbMap.put("wanted", new String[] {"hiahia", "I"}); // past
+        verbMap.put("am wanting",new String[] { "hiahia", "Kei te"}); //present
+        verbMap.put("was wanting", new String[] {"hiahia", "I"});//past
         //call
-        verbMap.put("call", "karanga");
-        verbMap.put("calling", "karanga"); //present
-        verbMap.put("called", "karanga"); //past
-        verbMap.put("will call", "karanga"); //future
-        verbMap.put("shall call", "karanga"); //future
+        verbMap.put("call", new String[] {"karanga", "Kei te"});
+        verbMap.put("calling", new String[] {"karanga", "Kei te"}); //present
+        verbMap.put("called", new String[] {"karanga", "I"}); //past
+        verbMap.put("will call", new String[] {"karanga", "Ka"}); //future
+        verbMap.put("shall call",new String[] { "karanga", "ka"}); //futur
         //ask
-        verbMap.put("ask", "pātai");
-        verbMap.put("asking", "pātai"); //present
-        verbMap.put("are asking", "pātai"); //present
-        verbMap.put("asked", "pātai"); //past
-        verbMap.put("will ask", "pātai"); //future
+        verbMap.put("ask", new String[] {"pātai", "I"});
+        verbMap.put("asking", new String[] {"pātai", "Kei te"}); //present
+        verbMap.put("are asking",new String[] { "pātai", "Kei te"}); //present
+        verbMap.put("asked", new String[] {"pātai", "I"}); //past
+        verbMap.put("will ask", new String[] {"pātai", "Ka"}); //future
         //read
-        verbMap.put("read", "pānui");
-        verbMap.put("to read", "pānui"); //present
-        verbMap.put("will read", "pānui"); //future 
-        verbMap.put("reading", "pānui"); //present
+        verbMap.put("read",new String[] { "pānui", "I"});
+        verbMap.put("to read",new String[] { "pānui", "Kei te"}); //present
+        verbMap.put("will read",new String[] { "pānui", "Ka"}); //future 
+        verbMap.put("reading", new String[] {"pānui", "Kei te"}); //present
         //learn
-        verbMap.put("learn", "ako");//present
-        verbMap.put("learnt", "ako");// past
-        verbMap.put("learned", "ako"); //past
-        verbMap.put("to learn", "ako"); // future
-        verbMap.put("are learning", "ako"); //present
-        verbMap.put("were learning", "ako");
-        verbMap.put("can learn", "ako");
+        verbMap.put("learn",new String[] { "ako", "Kei te"});//present
+        verbMap.put("learnt",new String[] { "ako", "I"});// past
+        verbMap.put("learned",new String[] { "ako", "I"}); //past
+        verbMap.put("to learn",new String[] { "ako", "Ka"}); // future
+        verbMap.put("are learning",new String[] { "ako", "Kei te"}); //present
+        verbMap.put("were learning",new String[] { "ako", "I"});
+        verbMap.put("can learn", new String[] {"ako", "Ka"});
     }
 
-    /**
-     * Creates a HashMap that maps English tenses to Maori tense markers
-     *
-     */
-    private void createTenseMap() {
-        tenseMap = new HashMap<>();
-        // go:
-        tenseMap.put("go", "I"); //past
-        tenseMap.put("are going", "Kei te");// future
-        tenseMap.put("am going", "Ka");// future
-        tenseMap.put("going", "Kei te");// present
-        tenseMap.put("went", "I");// past
-        tenseMap.put("gone", "I");// past
-        //make
-        tenseMap.put("make", "Ka"); //future
-        tenseMap.put("to make", "Ka");// future
-        tenseMap.put("made", "I");// past
-        tenseMap.put("are making", "Kei te"); // present
-        //see:
-        tenseMap.put("seeing", "Kei te"); //present
-        tenseMap.put("saw", "I"); //past
-        tenseMap.put("seen", "I"); //past
-        tenseMap.put("to see", "Ka"); //future
-        tenseMap.put("see", "Kei te"); //present
-        tenseMap.put("is seeing", "Kei te");// present
-        //want:
-        tenseMap.put("will want", "Ka"); //future
-        tenseMap.put("wanted", "I"); // past
-        tenseMap.put("am wanting", "Kei te"); //present
-        tenseMap.put("want", "Kei te");//present
-        tenseMap.put("was wanting", "I");//past
-        //call: 
-        tenseMap.put("call", "Kei te"); //present
-        tenseMap.put("calling", "Kei te"); //present
-        tenseMap.put("called", "I"); //past
-        tenseMap.put("will call", "Ka"); //future
-        tenseMap.put("shall call", "Ka"); //future
-        //ask
-        tenseMap.put("asking", "Kei te"); //present
-        tenseMap.put("are asking", "Kei te"); //present
-        tenseMap.put("asked", "I"); //past
-        tenseMap.put("will ask", "Ka"); //future
-        tenseMap.put("ask", "Kei te"); // present
-
-        //read
-        tenseMap.put("read", "I"); //past
-        tenseMap.put("to read", "Kei Te"); //present
-        tenseMap.put("will read", "Ka"); //future 
-        tenseMap.put("reading", "Kei te"); //present
-        //learn
-        tenseMap.put("learn", "Kei te");//present
-        tenseMap.put("learnt", "I");// past
-        tenseMap.put("learned", "I"); //past
-        tenseMap.put("to learn", "Ka"); // future
-        tenseMap.put("are learning", "Kei te"); //present
-        tenseMap.put("were learning", "I");
-        tenseMap.put("can learn", "Ka");
-    }
+   
 
     // Utility Methods
 
