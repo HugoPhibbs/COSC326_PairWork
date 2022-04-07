@@ -52,4 +52,19 @@ public class TranslateTest {
         assertThrows(PhraseLengthError.class, () -> translate.translatePhraseHelper("Gibberish"));
         assertThrows(PhraseLengthError.class, () -> translate.translatePhraseHelper("He is slowly going away"));
     }
+    @Test
+    public void testTranslation(){
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3 excl) to want"));
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are going"));
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
+    }
+
+    @Test
+    public void testverb(){
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3 excl) coming"));
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3 excl) tooo make"));
+        assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
+    }
+
+    
 }
