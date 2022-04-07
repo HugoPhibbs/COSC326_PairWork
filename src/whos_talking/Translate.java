@@ -91,7 +91,7 @@ public class Translate {
         try {
             return translatePhraseHelper(phrase);
         } catch (TranslateError te) {
-            return String.format("'%s' - %s", phrase, te.getMessage());
+            return String.format("\"%s\" - %s", phrase, te.getMessage());
         }
     }
 
@@ -286,9 +286,9 @@ public class Translate {
     private void checkPronounClause(String pronounClause) throws PronounError {
         if (!pronounMap.containsKey(pronounClause)) {
             if (pronounMap.containsKey(capitalizeString(pronounClause))) {
-                throw new PronounError("Pronoun should be capitalized");
+                throw new PronounError(pronounClause, "Pronoun", "should be capitalized");
             }
-            throw new PronounError("Pronoun is not valid");
+            throw new PronounError(pronounClause, "Pronoun", "not recognized");
         }
     }
 
@@ -301,7 +301,7 @@ public class Translate {
 
     private String translateVerbClause(String verbClause) throws TranslateError {
         if(!verbMap.containsKey(verbClause)){
-            throw new TranslateError("Verb non valid.");
+            throw new TranslateError(verbClause, "Verb", "not recognized");
         }
    
         return verbMap.get(verbClause);
@@ -312,10 +312,10 @@ public class Translate {
      * @param verbClause String for translation.
      * @return string translated from english.
      */
-
     private String translateTenseClause(String verbClause) throws TranslateError {
         if(!tenseMap.containsKey((verbClause))){
-            throw new TranslateError("Verb clause not valid for tense.");
+            // TODO will this line ever actually be triggered?
+            throw new TranslateError(verbClause, "Verb", "tense not recognized");
         }
         return tenseMap.get(verbClause);
     }
@@ -417,11 +417,10 @@ public class Translate {
         tenseMap.put("go", "I"); //past
         tenseMap.put("are going", "Kei te");// future
         tenseMap.put("am going", "Ka");// future
-        tenseMap.put("going", "Kei te");// present 
+        tenseMap.put("going", "Kei te");// present
         tenseMap.put("went", "I");// past
         tenseMap.put("gone", "I");// past
         //make
-        
         tenseMap.put("make", "Ka"); //future
         tenseMap.put("to make", "Ka");// future
         tenseMap.put("made", "I");// past
@@ -482,17 +481,4 @@ public class Translate {
         }
         return str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1).toLowerCase(Locale.ROOT);
     }
-
-    /**
-     * Checks if a string is capitalized or not
-     *
-     * Check capitalizeString(String) for my definition for a capitalized String
-     *
-     * @param str String as described
-     * @return boolean as described
-     */
-    private boolean stringIsCapitalized(String str) {
-        return (str.equals(this.capitalizeString(str)));
-    }
-
 }

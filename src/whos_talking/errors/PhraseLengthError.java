@@ -6,9 +6,9 @@ package whos_talking.errors;
 public class PhraseLengthError extends TranslateError {
 
     /**
-     * Constructor for an InvalidError
+     * Constructor for a PhraseLengthError
      *
-     * @param msg String for the error message to be displayed to a user
+     * @param msg: String for a message to be displayed to this user
      */
     public PhraseLengthError(String msg) {
         super(msg);
