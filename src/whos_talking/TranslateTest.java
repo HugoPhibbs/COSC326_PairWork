@@ -4,6 +4,7 @@ import org.junit.Test;
 import whos_talking.errors.PhraseLengthError;
 import whos_talking.errors.PronounError;
 import whos_talking.errors.TranslateError;
+import whos_talking.errors.VerbError;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,6 @@ public class TranslateTest {
     /**
      * Translate object used for testing
      */
-    
     private final Translate translate = new Translate();
 
     @Test
@@ -38,6 +38,19 @@ public class TranslateTest {
             fail();
         }
 
+    }
+
+    @Test
+    public void testExamples() {
+        assertEquals("Kei te haere mātou", translate.translatePhrase("We (3 excl) are going"));
+        assertEquals("Kei te haere au", translate.translatePhrase("I am going"));
+        assertEquals("Kei te pānui rāua", translate.translatePhrase("They (2 excl) are reading"));
+        // assertEquals("Kei te pānui kōrua", translate.translatePhrase("You (2 incl) are reading")); //TODO
+        assertEquals("I haere au", translate.translatePhrase("I went"));
+        assertEquals("Ka haere au", translate.translatePhrase("I will go"));
+
+        assertThrows(PhraseLengthError.class, () -> translate.translatePhraseHelper("gibberish"));
+        // assertThrows(VerbError.class, () -> translate.translatePhraseHelper("We (3 excl) are coming")); // TODO
     }
 
     @Test
