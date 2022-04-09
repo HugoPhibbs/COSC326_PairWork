@@ -3,6 +3,7 @@ package whos_talking;
 import whos_talking.errors.PhraseLengthError;
 import whos_talking.errors.PronounError;
 import whos_talking.errors.TranslateError;
+import whos_talking.errors.VerbError;
 
 import java.util.*;
 
@@ -295,10 +296,9 @@ public class Translate {
 
     private String[] translateVerbClause(String verbClause) throws TranslateError {
         if(!verbMap.containsKey(verbClause)){
-            throw new TranslateError(verbClause, "Verb", "not recognized");
+            throw new VerbError(verbClause, "Verb", "not recognized");
         }
-        String[] verb = verbMap.get(verbClause);
-        return verb;
+        return verbMap.get(verbClause);
     }
     
     // Creating Class HashMap attribute.
@@ -331,64 +331,70 @@ public class Translate {
     }
 
     /**
-     * Creates the verb map used for translation from english to maori
-     *
+     * Creates the verb map used for translation from English to Maori
      */
     private void createVerbMap() {
-        verbMap = new HashMap<String, String[]>();
+        verbMap = new HashMap<>();
+        String present = "Kei te";
+        String past  = "I";
+        String future = "Ka";
         //go
-        verbMap.put("go", new String[] {"haere", "Kei te"}); //present
-        verbMap.put("are going", new String[] {"haere", "Kei te"});// fpresent
-        verbMap.put("am going", new String[] {"haere", "Ka"});// future
-        verbMap.put("going", new String[] {"haere", "Kei te"});// present 
-        verbMap.put("went", new String[] {"haere", "I"});// past
-        verbMap.put("gone", new String[] {"haere", "I"});// past
+        String go = "haere";
+        verbMap.put("are going", new String[] {go, present});
+        verbMap.put("am going", new String[] {go, present});
+        verbMap.put("is going", new String[] {go, present});
+        verbMap.put("will go", new String[] {go, future});
+        verbMap.put("went", new String[] {go, past});
         //make
-        verbMap.put("make", new String[] {"hanga", "Ka"});
-        verbMap.put("to make", new String[] {"hanga", "Ka"});// future
-        verbMap.put("made", new String[] {"hanga", "I"});// past
-        verbMap.put("are making", new String[] {"hanga", "Kei te"}); // present
+        String make = "hanga";
+        verbMap.put("are making", new String[] {make, present});
+        verbMap.put("is making", new String[] {make, present});
+        verbMap.put("am making", new String[] {make, present});
+        verbMap.put("will make", new String[] {make, future});
+        verbMap.put("made", new String[] {make, past});
         //see
-        verbMap.put("see", new String[] {"kite", "Kei te"});
-        verbMap.put("seeing", new String[] {"kite", "Kei te"}); //present
-        verbMap.put("saw", new String[] {"kite" ,"I"}); //past
-        verbMap.put("seen", new String[] {"kite", "I"}); //past
-        verbMap.put("to see", new String[] {"kite", "Ka"}); //future
-        verbMap.put("is seeing",new String[] { "kite", "Kei te"});// present
+        String see = "kite";
+        verbMap.put("is seeing", new String[] {see, present});
+        verbMap.put("are seeing", new String[] {see, present});
+        verbMap.put("am seeing", new String[] {see, present});
+        verbMap.put("will see", new String[] {see, future});
+        verbMap.put("saw", new String[] {see ,past});
         //want
-        verbMap.put("want",new String[] { "hiahia", "Kei te"});
-        verbMap.put("will want",new String[] { "hiahia", "Ka"}); //future
-        verbMap.put("wanted", new String[] {"hiahia", "I"}); // past
-        verbMap.put("am wanting",new String[] { "hiahia", "Kei te"}); //present
-        verbMap.put("was wanting", new String[] {"hiahia", "I"});//past
+        String want = "hiahia";
+        verbMap.put("am wanting",new String[] { want, present});
+        verbMap.put("are wanting",new String[] { want, present});
+        verbMap.put("is wanting",new String[] {want, present});
+        verbMap.put("will want",new String[] { want, future});
+        verbMap.put("wanted", new String[] {want, past});
         //call
-        verbMap.put("call", new String[] {"karanga", "Kei te"});
-        verbMap.put("calling", new String[] {"karanga", "Kei te"}); //present
-        verbMap.put("called", new String[] {"karanga", "I"}); //past
-        verbMap.put("will call", new String[] {"karanga", "Ka"}); //future
-        verbMap.put("shall call",new String[] { "karanga", "ka"}); //futur
+        String call = "karanga";
+        verbMap.put("is calling", new String[] {call, present});
+        verbMap.put("are calling", new String[] {call, present});
+        verbMap.put("am calling", new String[] {call, present});
+        verbMap.put("will call", new String[] {call, future});
+        verbMap.put("called", new String[] {call, past});
         //ask
-        verbMap.put("ask", new String[] {"pātai", "I"});
-        verbMap.put("asking", new String[] {"pātai", "Kei te"}); //present
-        verbMap.put("are asking",new String[] { "pātai", "Kei te"}); //present
-        verbMap.put("asked", new String[] {"pātai", "I"}); //past
-        verbMap.put("will ask", new String[] {"pātai", "Ka"}); //future
+        String ask = "pātai";
+        verbMap.put("is asking", new String[] {ask, present});
+        verbMap.put("am asking", new String[] {ask, present});
+        verbMap.put("are asking",new String[] { ask, present});
+        verbMap.put("will ask", new String[] {ask, future});
+        verbMap.put("asked", new String[] {ask, past});
         //read
-        verbMap.put("read",new String[] { "pānui", "I"});
-        verbMap.put("to read",new String[] { "pānui", "Kei te"}); //present
-        verbMap.put("will read",new String[] { "pānui", "Ka"}); //future 
-        verbMap.put("reading", new String[] {"pānui", "Kei te"}); //present
+        String read = "pānui";
+        verbMap.put("is reading", new String[] {read, present});
+        verbMap.put("am reading", new String[] {read, present});
+        verbMap.put("are reading", new String[] {read, present});
+        verbMap.put("will read",new String[] {read, future});
+        verbMap.put("read",new String[] {read, past});
         //learn
-        verbMap.put("learn",new String[] { "ako", "Kei te"});//present
-        verbMap.put("learnt",new String[] { "ako", "I"});// past
-        verbMap.put("learned",new String[] { "ako", "I"}); //past
-        verbMap.put("to learn",new String[] { "ako", "Ka"}); // future
-        verbMap.put("are learning",new String[] { "ako", "Kei te"}); //present
-        verbMap.put("were learning",new String[] { "ako", "I"});
-        verbMap.put("can learn", new String[] {"ako", "Ka"});
+        String learn = "learn";
+        verbMap.put("are learning",new String[] { learn, present});
+        verbMap.put("is learning",new String[] { learn, present});
+        verbMap.put("am learning",new String[] { learn, present});
+        verbMap.put("will learn",new String[] { learn, future});
+        verbMap.put("learnt",new String[] { learn, past});
     }
-
-   
 
     // Utility Methods
 
