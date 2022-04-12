@@ -5,6 +5,8 @@ import whos_talking.errors.PronounError;
 import whos_talking.errors.TranslateError;
 import whos_talking.errors.VerbError;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.Map.entry;
@@ -42,7 +44,43 @@ public class Translate {
      */
     public void start() {
         ArrayList<String> phrases = getInput();
-        printTranslatedPhrases(phrases);
+        saveTranslatesPhrases(translatePhrases(phrases));
+    }
+
+    /**
+     * Translates an list of english phrases to Maori, returns a list of this result
+     *
+     * @param englishPhrases Arraylist of english phrases
+     * @return ArrayList as describe
+     */
+    private ArrayList<String> translatePhrases(ArrayList<String> englishPhrases) {
+        ArrayList<String> translatedPhrases = new ArrayList<>();
+        for (String phrase : englishPhrases) {
+            translatedPhrases.add(translatePhrase(phrase));
+        }
+        return translatedPhrases;
+    }
+
+    /**
+     * Writes translated phrases to a text file in the same directory as this class
+     *
+     * @param phrases ArrayList of translated phrases
+     */
+    private void saveTranslatesPhrases(ArrayList<String> phrases) {
+        String phrasesJoint = String.join("\n", phrases);
+        try {
+            //TODO make this the same directory as class, rn its going to project directory
+            FileWriter fileWriter = new FileWriter("translated_phrases.txt");
+            fileWriter.write(phrasesJoint);
+            fileWriter.flush();
+            fileWriter.close();
+            System.out.println("See newly created txt file for output");
+        }
+        catch (IOException ioe) {
+            System.out.println("Saving to file failed");
+            ioe.printStackTrace();
+        }
+
     }
 
     /**
@@ -325,9 +363,9 @@ public class Translate {
                 entry("We (3 incl)", "tātou"),
                 entry("We (2 excl)", "māua"),
                 entry("We (3 excl)", "mātou"),
-                entry("You (3 excl)", "koutou"),
-                entry("You (2 excl)", "kōrua"),
-                entry("You (1 excl)", "koe")));
+                entry("You (3 incl)", "koutou"),
+                entry("You (2 incl)", "kōrua"),
+                entry("You (1 incl)", "koe")));
     }
 
     /**
