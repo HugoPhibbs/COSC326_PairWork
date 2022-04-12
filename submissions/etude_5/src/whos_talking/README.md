@@ -1,3 +1,23 @@
+# Etude 5: Look Who's Talking
+
+
+## Using the program
+- Upon running the program, you will be guided with instructions.
+
+## Compilation and running
+- Navigate to the directory of this submission via command line (this is the top level of the zip folder)
+- Enter the bellow command into command line to compile the program
+```shell
+
+```
+- Then to run enter:
+
+```
+
+## Tests
+- We tested our program using JUnit
+- The code for the test class is shown bellow
+```java
 package whos_talking;
 
 import org.junit.Test;
@@ -24,7 +44,7 @@ public class TranslateTest {
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("We saw"));
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He (2 excl) is seeing"));
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He is is seeing"));
-
+        
         try {
             translate.translatePhraseHelper("We (3 excl) are going");
             translate.translatePhraseHelper("I am going");
@@ -77,3 +97,9 @@ public class TranslateTest {
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
     }
 }
+
+```
+
+## Libraries used
+- We didn't use any libraries that were particularly out of the ordinary, such as java.util
+- For testing we used JUnit 5.7
