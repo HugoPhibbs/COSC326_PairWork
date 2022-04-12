@@ -25,8 +25,6 @@ public class TranslateTest {
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He (2 excl) is seeing"));
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He is is seeing"));
 
-        // Test with correct input
-        // TODO update these with implementation!
         try {
             translate.translatePhraseHelper("We (3 excl) are going");
             translate.translatePhraseHelper("I am going");
@@ -45,7 +43,7 @@ public class TranslateTest {
         assertEquals("Kei te haere mātou", translate.translatePhrase("We (3 excl) are going"));
         assertEquals("Kei te haere au", translate.translatePhrase("I am going"));
         assertEquals("Kei te pānui rāua", translate.translatePhrase("They (2 excl) are reading"));
-        // assertEquals("Kei te pānui kōrua", translate.translatePhrase("You (2 incl) are reading")); //TODO
+        assertEquals("Kei te pānui kōrua", translate.translatePhrase("You (2 incl) are reading")); //TODO
         assertEquals("I haere au", translate.translatePhrase("I went"));
         assertEquals("Ka haere au", translate.translatePhrase("I will go"));
 
@@ -78,5 +76,4 @@ public class TranslateTest {
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3 excl) tooo make"));
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
     }
-    
 }
