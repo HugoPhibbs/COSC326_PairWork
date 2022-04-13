@@ -35,16 +35,47 @@ public class Translate {
         createMaps();
     }
 
+    /**
+     * Main method for this program
+     *
+     * @param args String array for arguments. If left empty, then Translates saves to a file, otherwise this can be specified.
+     */
     public static void main(String[] args) {
-        new Translate().start();
+        assert args.length <=1: "Must have no more than one argument!";
+        if (args.length == 1) {
+            new Translate().start(args[0]);
+        }
+        else {
+            new Translate().start("file");
+        }
     }
 
     /**
      * Starts the Who's Talking program
+     *  
+     * @param outputOption how the result of this program should be outputted
      */
-    public void start() {
-        ArrayList<String> phrases = getInput();
-        saveTranslatesPhrases(translatePhrases(phrases));
+    public void start(String outputOption) {
+        assert outputOption.equals("cmd") || outputOption.equals("file"): "Output option must be either cmd or file!";
+        ArrayList<String> translatedPhrases = translatePhrases(getInput());
+        if (outputOption.equals("cmd")) {
+            printTranslatedPhrases(translatedPhrases);
+        }
+        else {
+            saveTranslatesPhrases(translatedPhrases);
+        }
+    }
+
+    /**
+     * Prints translated phrases
+     *
+     * @param translatedPhrases ArrayList containing Strings for translated Maori phrases
+     */
+    private void printTranslatedPhrases(ArrayList<String> translatedPhrases) {
+        System.out.println("Output:");
+        for (String phrase : translatedPhrases) {
+            System.out.println(phrase);
+        }
     }
 
     /**
@@ -83,17 +114,6 @@ public class Translate {
 
     }
 
-    /**
-     * Prints Maori translations of entered English translations from a user
-     *
-     * @param phrases ArrayList containing Strings for English phrases
-     */
-    private void printTranslatedPhrases(ArrayList<String> phrases) {
-        System.out.println("Output:");
-        for (String phrase : phrases) {
-            System.out.println(translatePhrase(phrase));
-        }
-    }
 
     /**
      * Gets a list of English phrases to be translated to Maori
