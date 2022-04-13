@@ -41,18 +41,18 @@ public class Translate {
      * @param args String array for arguments. If left empty, then Translates saves to a file, otherwise this can be specified.
      */
     public static void main(String[] args) {
+        assert args.length <=1: "Must have no more than one argument!";
         if (args.length == 1) {
             new Translate().start(args[0]);
         }
         else {
             new Translate().start("file");
         }
-
     }
 
     /**
      * Starts the Who's Talking program
-     *
+     *  
      * @param outputOption how the result of this program should be outputted
      */
     public void start(String outputOption) {
