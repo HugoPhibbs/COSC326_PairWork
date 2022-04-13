@@ -11,6 +11,7 @@
 
 ```
 - Then to run enter:
+```shell
 
 ```
 
