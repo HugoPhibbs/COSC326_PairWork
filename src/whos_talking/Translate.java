@@ -325,9 +325,10 @@ public class Translate {
      * @return String for a Maori translation of the inputted English pronoun clause
      */
     private String translatePronounClause(String pronounClause) throws PronounError {
-        checkPronounClause(pronounClause);
-        assert pronounMap.containsKey(pronounClause) : "Pronoun should be valid";
-        return pronounMap.get(pronounClause); 
+        String remake = check2(pronounClause);
+        checkPronounClause(remake);
+        assert pronounMap.containsKey(remake) : "Pronoun should be valid";
+        return pronounMap.get(remake); 
     }
 
     /**
@@ -368,6 +369,23 @@ public class Translate {
         createVerbMap();
        
     }
+    public String check2(String pronoun) throws PronounError{
+        try{
+        String[] a = pronoun.split(" ", 2); 
+        String brackets = a[1];
+        String number = ""+brackets.charAt(1);
+        String[] end = brackets.split(" ");
+        if(Integer.parseInt(number) >=3){
+            String remake = a[0] + " " + "(3" + " " + end[1]; 
+            return remake;
+        } else {
+            return pronounMap.get(pronoun);
+        }
+    } catch(Exception e){
+        throw new PronounError(pronoun, "pronoun", "not recognized");
+        }
+    }
+    
 
     /**
      * Creates a HashMap that is used to map English to Maori pronouns
