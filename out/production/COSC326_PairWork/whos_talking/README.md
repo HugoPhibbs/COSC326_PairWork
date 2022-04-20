@@ -6,13 +6,17 @@
 
 ## Compilation and running
 - Navigate to the directory of this submission via command line (this is the top level of the zip folder)
+- To allow Maori hyphenated verbs to appear, in the command line enter:
+```shell
+set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
+```
 - Enter the bellow command into command line to compile the program
 ```shell
-
+javac -d out -cp src -encoding UTF-8 src/whos_talking/Translate.java
 ```
 - Then to run enter:
 ```shell
-
+java -cp out -D"file.encoding=UTF8" whos_talking/Translate
 ```
 
 ## Tests
