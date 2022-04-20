@@ -105,8 +105,7 @@ public class Translate {
             fileWriter.write(phrasesJoint);
             fileWriter.flush();
             fileWriter.close();
-            System.out.println(phrasesJoint);
-            System.out.println("See newly created txt file for output with hyphenated maori vowles.");
+            System.out.println("See newly created txt file for output");
         }
         catch (IOException ioe) {
             System.out.println("Saving to file failed");
