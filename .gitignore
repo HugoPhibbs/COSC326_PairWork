@@ -9,3 +9,6 @@
 
 /translated_phrases.txt
 /out
+
+# Default ignored files
+workspace.xml
