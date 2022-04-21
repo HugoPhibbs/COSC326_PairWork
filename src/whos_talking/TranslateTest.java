@@ -1,6 +1,6 @@
 package whos_talking;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import whos_talking.errors.PhraseLengthError;
 import whos_talking.errors.PronounError;
 import whos_talking.errors.TranslateError;
