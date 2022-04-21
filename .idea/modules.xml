@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/COSC326_PairWork.iml" filepath="$PROJECT_DIR$/.idea/COSC326_PairWork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/COSC326_PairWork.iml" filepath="$PROJECT_DIR$/COSC326_PairWork.iml" />
     </modules>
   </component>
 </project>
