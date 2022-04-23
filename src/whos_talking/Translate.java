@@ -322,10 +322,16 @@ public class Translate {
      * @return String for a Maori translation of the inputted English pronoun clause
      */
     private String translatePronounClause(String pronounClause) throws PronounError {
+        try{
         String remake = checkGreaterThen3(pronounClause);
         checkPronounClause(remake);
         assert pronounMap.containsKey(remake) : "Pronoun should be valid";
         return pronounMap.get(remake);
+        
+        } catch (Exception e) {
+            throw new PronounError(pronounClause, "Pronoun", "not recognized");
+        }
+
     }
 
     /**
