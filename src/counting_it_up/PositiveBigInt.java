@@ -34,6 +34,25 @@ public class PositiveBigInt {
     }
 
     /**
+     * Finds the factorial of this PositiveBigInt
+     *
+     * @return a new PositiveBigInt object
+     */
+    public PositiveBigInt factorial() {
+        PositiveBigInt ONE = new PositiveBigInt("1");
+        if (value.equals("0")) {
+            return ONE;
+        }
+        PositiveBigInt result = ONE;
+        PositiveBigInt curr = result;
+        while (curr.isSmallerThan(this) || curr.equals(this)) {
+            result = result.mul(curr);
+            curr.increment();
+        }
+        return result;
+    }
+
+    /**
      * Calculates a*b, where 'a' is this PositiveBigInt
      *
      * Code borrowed from GeeksForGeeks: https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
@@ -49,7 +68,7 @@ public class PositiveBigInt {
             return new PositiveBigInt("0");
         int[] result = new int[len1 + len2];
         int i_n1 = 0;
-        int i_n2 = 0;
+        int i_n2;
         for (int i = len1 - 1; i >= 0; i--)
         {
             int carry = 0;
@@ -84,7 +103,7 @@ public class PositiveBigInt {
      * Strips leading zeros from an Integer represented as a String
      *
      * @param val String to be stripped
-     * @return
+     * @return a new String as described
      */
     public String stripZeros(String val) {
         assert (val.length() != 0) : "Val cannot be an empty String!";
@@ -180,12 +199,12 @@ public class PositiveBigInt {
         PositiveBigInt remainder = diff(b);
         PositiveBigInt result = new PositiveBigInt("0");
         while (remainder.isSmallerThan(prevRemainder) && !remainder.equals(ZERO)) {
-            result.incrementBy("1");
+            result.increment();
             prevRemainder = remainder;
             remainder = remainder.diff(b);
         }
         if (remainder.equals(ZERO)) {
-            result.incrementBy("1");
+            result.increment();
         }
         return result;
     }
@@ -239,12 +258,11 @@ public class PositiveBigInt {
     }
 
     /**
-     * Increments this PositiveBigInt by an inputted value
+     * Increments this PositiveBigInt by 1
      *
-     * @param val String to be added to the value of this big int
      */
-    private void incrementBy(String val) {
-         setValue(addValues(value, val));
+    private void increment() {
+         setValue(addValues(value, "1"));
     }
 
     /**
