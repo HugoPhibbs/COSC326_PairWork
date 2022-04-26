@@ -11,7 +11,9 @@ public class CountingItUp {
     public static long kFact;
 
     public static void main(String[] args){
-        setup(10, 11);
+        BigInt a = new BigInt("125");
+        BigInt b = new BigInt("9");
+        System.out.println(a.minus(b));
     }
 
     private static long denominator(long kF, long n, long k){
