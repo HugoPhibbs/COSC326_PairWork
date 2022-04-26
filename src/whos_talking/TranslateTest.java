@@ -27,13 +27,12 @@ public class TranslateTest {
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("We saw"));
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He (2 excl) is seeing"));
         assertThrows(PronounError.class, () -> translate.translatePhraseHelper("He is is seeing"));
+        assertThrows(PronounError.class, () -> translate.translatePhraseHelper("You (3 excl9) are seeing"));
 
-        /*
         assertEquals("Ka haere koutou", translate.translatePhrase("You (4 incl) will go"));
         assertEquals("Ka haere koutou", translate.translatePhrase("You (3 incl) will go"));
         assertEquals("Ka haere koutou", translate.translatePhrase("You (100 incl) will go"));
         assertEquals("Kei te haere mātou", translate.translatePhrase("We (4 excl) are going"));
-        */
 
         try {
             translate.translatePhraseHelper("We (3 excl) are going");
