@@ -18,6 +18,15 @@ class PositiveBigIntTest {
     }
 
     @Test
+    void factorialTest() {
+        assertEquals("1", new PositiveBigInt("0").factorial().getValue());
+        assertEquals("1", new PositiveBigInt("1").factorial().getValue());
+        assertEquals("2", new PositiveBigInt("2").factorial().getValue());
+        assertEquals("120", new PositiveBigInt("5").factorial().getValue());
+        assertEquals("720", new PositiveBigInt("6").factorial().getValue());
+    }
+
+    @Test
     void stripZerosTest() {
         assertEquals("1", a.stripZeros("1"));
         assertEquals("1", a.stripZeros("01"));
