@@ -39,7 +39,7 @@ public class PositiveBigInt {
      * @return a new PositiveBigInt object
      */
     public PositiveBigInt factorial() {
-        PositiveBigInt ONE = new PositiveBigInt("1");
+        final PositiveBigInt ONE = new PositiveBigInt("1");
         if (value.equals("0")) {
             return ONE;
         }
