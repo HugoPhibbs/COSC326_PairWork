@@ -8,6 +8,7 @@ import whos_talking.errors.VerbError;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.lang.*;
 
 import static java.util.Map.entry;
 
@@ -26,8 +27,6 @@ public class Translate {
      */
     private HashMap<String, String[]> verbMap;
 
- 
-
     /**
      * Constructor for a Translate object
      */
@@ -38,30 +37,29 @@ public class Translate {
     /**
      * Main method for this program
      *
-     * @param args String array for arguments. If left empty, then Translates saves to a file, otherwise this can be specified.
+     * @param args String array for arguments. If left empty, then Translates saves
+     *             to a file, otherwise this can be specified.
      */
     public static void main(String[] args) {
-        assert args.length <=1: "Must have no more than one argument!";
+        assert args.length <= 1 : "Must have no more than one argument!";
         if (args.length == 1) {
             new Translate().start(args[0]);
-        }
-        else {
+        } else {
             new Translate().start("file");
         }
     }
 
     /**
      * Starts the Who's Talking program
-     *  
+     * 
      * @param outputOption how the result of this program should be outputted
      */
     public void start(String outputOption) {
-        assert outputOption.equals("cmd") || outputOption.equals("file"): "Output option must be either cmd or file!";
+        assert outputOption.equals("cmd") || outputOption.equals("file") : "Output option must be either cmd or file!";
         ArrayList<String> translatedPhrases = translatePhrases(getInput());
         if (outputOption.equals("cmd")) {
             printTranslatedPhrases(translatedPhrases);
-        }
-        else {
+        } else {
             saveTranslatesPhrases(translatedPhrases);
         }
     }
@@ -69,7 +67,8 @@ public class Translate {
     /**
      * Prints translated phrases
      *
-     * @param translatedPhrases ArrayList containing Strings for translated Maori phrases
+     * @param translatedPhrases ArrayList containing Strings for translated Maori
+     *                          phrases
      */
     private void printTranslatedPhrases(ArrayList<String> translatedPhrases) {
         System.out.println("Output:");
@@ -100,20 +99,18 @@ public class Translate {
     private void saveTranslatesPhrases(ArrayList<String> phrases) {
         String phrasesJoint = String.join("\n", phrases);
         try {
-            //TODO make this the same directory as class, rn its going to project directory
+            // TODO make this the same directory as class, rn its going to project directory
             FileWriter fileWriter = new FileWriter("translated_phrases.txt");
             fileWriter.write(phrasesJoint);
             fileWriter.flush();
             fileWriter.close();
             System.out.println("See newly created txt file for output");
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Saving to file failed");
             ioe.printStackTrace();
         }
 
     }
-
 
     /**
      * Gets a list of English phrases to be translated to Maori
@@ -325,9 +322,16 @@ public class Translate {
      * @return String for a Maori translation of the inputted English pronoun clause
      */
     private String translatePronounClause(String pronounClause) throws PronounError {
-        checkPronounClause(pronounClause);
-        assert pronounMap.containsKey(pronounClause) : "Pronoun should be valid";
-        return pronounMap.get(pronounClause); 
+        try{
+        String remake = checkGreaterThen3(pronounClause);
+        checkPronounClause(remake);
+        assert pronounMap.containsKey(remake) : "Pronoun should be valid";
+        return pronounMap.get(remake);
+        
+        } catch (Exception e) {
+            throw new PronounError(pronounClause, "Pronoun", "not recognized");
+        }
+
     }
 
     /**
@@ -346,19 +350,19 @@ public class Translate {
     }
 
     /**
-     * translates verb clause to maori version. 
+     * translates verb clause to maori version.
      * 
      * @param verbClause String for translation.
      * @return string translated from english.
      */
 
     private String[] translateVerbClause(String verbClause) throws TranslateError {
-        if(!verbMap.containsKey(verbClause)){
+        if (!verbMap.containsKey(verbClause)) {
             throw new VerbError(verbClause, "Verb", "not recognized");
         }
         return verbMap.get(verbClause);
     }
-    
+
     // Creating Class HashMap attribute.
     /**
      * Creates the HashMaps used for translating English to Maori phrases
@@ -366,7 +370,37 @@ public class Translate {
     private void createMaps() {
         createPronounMap();
         createVerbMap();
-       
+
+    }
+    /** 
+     * checks if the number given within the brackets is greater then 3 and swithch to 3 if so.
+     * @string the pronoun
+     * @string the pronoun remade.
+     */
+    public String checkGreaterThen3(String pronoun) throws PronounError{
+        if(pronounMap.get(pronoun) != null){
+            return pronoun;
+        }else {
+            try{
+                StringBuilder sb = new StringBuilder(100);
+                for (int i = 0 ;i<pronoun.length(); i++ ) {
+                    char ch = pronoun.charAt(i);
+                    if(Character.isDigit(ch)){
+                        sb.append(ch);
+                    }
+
+                }
+                String num = sb.toString();
+                if(Integer.parseInt(num) > 3){
+                    String remake = pronoun.replace(num, "3");
+                    return remake;
+                } else {
+                    return pronounMap.get(pronoun);
+                }
+            } catch(Exception e){
+                throw new PronounError(pronoun, "pronoun", "not recognized");
+            }
+        }
     }
 
     /**
@@ -394,64 +428,64 @@ public class Translate {
     private void createVerbMap() {
         verbMap = new HashMap<>();
         String present = "Kei te";
-        String past  = "I";
+        String past = "I";
         String future = "Ka";
-        //go
+        // go
         String go = "haere";
-        verbMap.put("are going", new String[] {go, present});
-        verbMap.put("am going", new String[] {go, present});
-        verbMap.put("is going", new String[] {go, present});
-        verbMap.put("will go", new String[] {go, future});
-        verbMap.put("went", new String[] {go, past});
-        //make
+        verbMap.put("are going", new String[] { go, present });
+        verbMap.put("am going", new String[] { go, present });
+        verbMap.put("is going", new String[] { go, present });
+        verbMap.put("will go", new String[] { go, future });
+        verbMap.put("went", new String[] { go, past });
+        // make
         String make = "hanga";
-        verbMap.put("are making", new String[] {make, present});
-        verbMap.put("is making", new String[] {make, present});
-        verbMap.put("am making", new String[] {make, present});
-        verbMap.put("will make", new String[] {make, future});
-        verbMap.put("made", new String[] {make, past});
-        //see
+        verbMap.put("are making", new String[] { make, present });
+        verbMap.put("is making", new String[] { make, present });
+        verbMap.put("am making", new String[] { make, present });
+        verbMap.put("will make", new String[] { make, future });
+        verbMap.put("made", new String[] { make, past });
+        // see
         String see = "kite";
-        verbMap.put("is seeing", new String[] {see, present});
-        verbMap.put("are seeing", new String[] {see, present});
-        verbMap.put("am seeing", new String[] {see, present});
-        verbMap.put("will see", new String[] {see, future});
-        verbMap.put("saw", new String[] {see ,past});
-        //want
+        verbMap.put("is seeing", new String[] { see, present });
+        verbMap.put("are seeing", new String[] { see, present });
+        verbMap.put("am seeing", new String[] { see, present });
+        verbMap.put("will see", new String[] { see, future });
+        verbMap.put("saw", new String[] { see, past });
+        // want
         String want = "hiahia";
-        verbMap.put("am wanting",new String[] { want, present});
-        verbMap.put("are wanting",new String[] { want, present});
-        verbMap.put("is wanting",new String[] {want, present});
-        verbMap.put("will want",new String[] { want, future});
-        verbMap.put("wanted", new String[] {want, past});
-        //call
+        verbMap.put("am wanting", new String[] { want, present });
+        verbMap.put("are wanting", new String[] { want, present });
+        verbMap.put("is wanting", new String[] { want, present });
+        verbMap.put("will want", new String[] { want, future });
+        verbMap.put("wanted", new String[] { want, past });
+        // call
         String call = "karanga";
-        verbMap.put("is calling", new String[] {call, present});
-        verbMap.put("are calling", new String[] {call, present});
-        verbMap.put("am calling", new String[] {call, present});
-        verbMap.put("will call", new String[] {call, future});
-        verbMap.put("called", new String[] {call, past});
-        //ask
+        verbMap.put("is calling", new String[] { call, present });
+        verbMap.put("are calling", new String[] { call, present });
+        verbMap.put("am calling", new String[] { call, present });
+        verbMap.put("will call", new String[] { call, future });
+        verbMap.put("called", new String[] { call, past });
+        // ask
         String ask = "pātai";
-        verbMap.put("is asking", new String[] {ask, present});
-        verbMap.put("am asking", new String[] {ask, present});
-        verbMap.put("are asking",new String[] { ask, present});
-        verbMap.put("will ask", new String[] {ask, future});
-        verbMap.put("asked", new String[] {ask, past});
-        //read
+        verbMap.put("is asking", new String[] { ask, present });
+        verbMap.put("am asking", new String[] { ask, present });
+        verbMap.put("are asking", new String[] { ask, present });
+        verbMap.put("will ask", new String[] { ask, future });
+        verbMap.put("asked", new String[] { ask, past });
+        // read
         String read = "pānui";
-        verbMap.put("is reading", new String[] {read, present});
-        verbMap.put("am reading", new String[] {read, present});
-        verbMap.put("are reading", new String[] {read, present});
-        verbMap.put("will read",new String[] {read, future});
-        verbMap.put("read",new String[] {read, past});
-        //learn
+        verbMap.put("is reading", new String[] { read, present });
+        verbMap.put("am reading", new String[] { read, present });
+        verbMap.put("are reading", new String[] { read, present });
+        verbMap.put("will read", new String[] { read, future });
+        verbMap.put("read", new String[] { read, past });
+        // learn
         String learn = "learn";
-        verbMap.put("are learning",new String[] { learn, present});
-        verbMap.put("is learning",new String[] { learn, present});
-        verbMap.put("am learning",new String[] { learn, present});
-        verbMap.put("will learn",new String[] { learn, future});
-        verbMap.put("learnt",new String[] { learn, past});
+        verbMap.put("are learning", new String[] { learn, present });
+        verbMap.put("is learning", new String[] { learn, present });
+        verbMap.put("am learning", new String[] { learn, present });
+        verbMap.put("will learn", new String[] { learn, future });
+        verbMap.put("learnt", new String[] { learn, past });
     }
 
     // Utility Methods
