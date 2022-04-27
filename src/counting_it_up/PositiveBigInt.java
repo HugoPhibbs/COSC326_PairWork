@@ -1,5 +1,9 @@
 package counting_it_up;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * A class to represent a custom BigInteger class, for Positive integers only
  *
@@ -29,7 +33,7 @@ public class PositiveBigInt {
      */
     public void setValue(String val) {
         String stripped = stripZeros(val);
-        assert (stringIsInt(stripped) && (valueIsPositive(val))) : "Inputted value must be an integer!";
+        assert (stringIsInt(stripped) && (valueIsPositive(val))) : "Inputted value must a positive integer!";
         value = stripped;
     }
 
@@ -43,8 +47,8 @@ public class PositiveBigInt {
         if (value.equals("0")) {
             return ONE;
         }
-        PositiveBigInt result = ONE;
-        PositiveBigInt curr = result;
+        PositiveBigInt result = new PositiveBigInt("1");
+        PositiveBigInt curr = new PositiveBigInt("1");
         while (curr.isSmallerThan(this) || curr.equals(this)) {
             result = result.mul(curr);
             curr.increment();
@@ -105,7 +109,7 @@ public class PositiveBigInt {
      * @param val String to be stripped
      * @return a new String as described
      */
-    public String stripZeros(String val) {
+    public static String stripZeros(String val) {
         assert (val.length() != 0) : "Val cannot be an empty String!";
         char[] charArray = val.toCharArray();
         int i = 0;
@@ -122,53 +126,48 @@ public class PositiveBigInt {
      *
      * Assumes that the two inputted values can both be interpreted as integers
      *
-     * Borrows code from GeeksForGeeks: https://www.geeksforgeeks.org/sum-two-large-numbers/
+     * Borrows code from StackExchange: https://codereview.stackexchange.com/questions/32954/adding-two-big-integers-represented-as-strings
      *
-     * @param value1 String digits of an integer
-     * @param value2 String digits of another integer
+     * @param a String digits of an integer
+     * @param b String digits of another integer
      * @return String for value1+value2 (in digits)
      */
-    private String addValues(String value1, String value2) {
-        if (value1.length() > value2.length()) {
-            String temp = value1;
-            value1 = value2;
-            value2 = temp;
+    public static String addValues(String a, String b) {
+        StringBuilder buf = new StringBuilder();
+        for ( int i1 = a.length() - 1, i2 = b.length() - 1, carry = 0;
+              i1 >= 0 || i2 >= 0 || carry != 0;
+              i1--, i2-- ) {
+            int digit1 = i1 < 0 ? 0 :
+                    Integer.parseInt(Character.toString(a.charAt(i1)));
+            int digit2 = i2 < 0 ? 0 :
+                    Integer.parseInt(Character.toString(b.charAt(i2)));
+
+            int digit = digit1 + digit2 + carry;
+            if (digit > 9) {
+                carry = 1;
+                digit -= 10;
+            } else {
+                carry = 0;
+            }
+
+            buf.append(digit);
         }
-        StringBuilder result = new StringBuilder();
-        int length1 = value1.length(), length2 = value2.length();
-        int lengthDiff = length2 - length1;
-        int carry = 0;
-        int currSum;
-        for (int i = length1 - 1; i >= 0; i--) {
-            currSum = ((int) value1.charAt(i) - (int) '0') + ((int) value2.charAt(i + lengthDiff) - (int) '0') + carry;
-            result.append((char) (currSum % 10 + '0'));
-            carry = currSum / 10;
-        }
-        for (int j = length2 - length1 - 1; j >= 0; j--) {
-            currSum = value2.charAt(j);
-            result.append((char) (currSum % 10) + '0');
-            carry = currSum / 10;
-        }
-        if (carry > 0) {
-            result.append((char) carry);
-        }
-        return result.reverse().toString();
+        return buf.reverse().toString();
     }
 
-    /**
-     * Checks if an inputted String is an integer or not
-     *
-     * @param str String for an inputted string
-     */
-    private boolean stringIsInt(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        }
-        catch (NumberFormatException nfe){
-            return false;
-        }
 
+        /**
+         * Checks if an inputted String is an integer or not
+         *
+         * @param str String for an inputted string
+         */
+    private boolean stringIsInt(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -178,7 +177,6 @@ public class PositiveBigInt {
      * @return boolean as described
      */
     private boolean valueIsPositive(String val) {
-        // TODO check if a value is an integer or not
         return val.charAt(0) != '-';
     }
 
@@ -262,7 +260,7 @@ public class PositiveBigInt {
      *
      */
     private void increment() {
-         setValue(addValues(value, "1"));
+         setValue(PositiveBigInt.addValues(value, "1"));
     }
 
     /**
