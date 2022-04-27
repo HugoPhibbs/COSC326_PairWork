@@ -1,3 +1,28 @@
+# Etude 5: Look Who's Talking
+
+
+## Using the program
+- Upon running the program, you will be guided with instructions.
+
+## Compilation and running
+- Navigate to the directory of this submission via command line (this is the top level of the zip folder)
+- To allow Maori hyphenated verbs to appear, in the command line enter:
+```shell
+set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
+```
+- Enter the bellow command into command line to compile the program
+```shell
+javac -d out -cp src -encoding UTF-8 src/whos_talking/Translate.java
+```
+- Then to run enter:
+```shell
+java -cp out -D"file.encoding=UTF8" whos_talking/Translate
+```
+
+## Tests
+- We tested our program using JUnit
+- The code for the test class is shown bellow
+```java
 package whos_talking;
 
 import org.junit.jupiter.api.Test;
@@ -85,3 +110,10 @@ public class TranslateTest {
         assertThrows(TranslateError.class, () -> translate.translatePhraseHelper("We (3) are go"));
     }
 }
+
+
+```
+
+## Libraries used
+- We didn't use any libraries that were particularly out of the ordinary, such as java.util
+- For testing we used JUnit 5.7

@@ -24,6 +24,8 @@ class PositiveBigIntTest {
         assertEquals("2", new PositiveBigInt("2").factorial().getValue());
         assertEquals("120", new PositiveBigInt("5").factorial().getValue());
         assertEquals("720", new PositiveBigInt("6").factorial().getValue());
+        assertEquals("3628800", new PositiveBigInt("10").factorial().getValue());
+        assertEquals("620448401733239439360000", new PositiveBigInt("24").factorial().getValue());
     }
 
     @Test
@@ -57,5 +59,15 @@ class PositiveBigIntTest {
         assertEquals("16", (new PositiveBigInt("25").diff(new PositiveBigInt("9")).getValue()));
         assertEquals("2", b.diff(a).getValue());
         assertEquals("0", b.diff(b).getValue());
+    }
+
+    @Test
+    void addTest() {
+        assertEquals("1", PositiveBigInt.addValues("0", "1"));
+        assertEquals("5", PositiveBigInt.addValues("4", "1"));
+        assertEquals("10", PositiveBigInt.addValues("9", "1"));
+        assertEquals("10", PositiveBigInt.addValues("1", "9"));
+        assertEquals("11", PositiveBigInt.addValues("1", "10"));
+        assertEquals("25", PositiveBigInt.addValues("15", "10"));
     }
 }
