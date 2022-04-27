@@ -5,41 +5,53 @@ package counting_it_up;
  */
 public class CountingItUp {
 
-    public static long nActual; 
-    public static long kActual; 
-    public static long nFact;
-    public static long kFact;
+ 
 
     public static void main(String[] args){
-        PositiveBigInt a = new PositiveBigInt("125");
-        PositiveBigInt b = new PositiveBigInt("9");
-        System.out.println(a.diff(b));
+        PositiveBigInt n = new PositiveBigInt("20");
+        PositiveBigInt k = new PositiveBigInt("2");
+        System.out.println(setup(n, k));
+        
     }
-
-    private static long denominator(long kF, long n, long k){
-        long result = (kF * (n - k)); 
-        System.out.println(result);
-        long fact = factorised(result); 
-        return fact;
+    /**
+     * this method creates the denomeinaitor of the forumal. 
+     * 
+     * @param kF takes k factorised 
+     * @param n the value n 
+     * @param k the value k
+     * @return the denominator needed in the forumula 
+     */
+    private static PositiveBigInt denominator(PositiveBigInt kF, PositiveBigInt n, PositiveBigInt k){
+        PositiveBigInt nplaceHold = n.diff(k);
+        PositiveBigInt nPlaceHoldF = nplaceHold.factorial();
+        PositiveBigInt result = kF.mul(nPlaceHoldF); 
+      
+        return result;
     }
-
-    private static void setup(long n, long k){
-
+    /**
+     * this method calls the methods denominator and formula to calculate problem
+     * @param n the value given
+     * @param k the value given
+     * @return the result of forumla 
+     */
+    private static PositiveBigInt setup(PositiveBigInt n, PositiveBigInt k){
+        PositiveBigInt answer = formula(n.factorial(), denominator(k.factorial(), n, k));
+     
+        return answer;
     }
   
-    private static long factorised(long n){
-        long fact = 1; 
-        for(int i =1; i<= n; i++){
-            fact *= i; 
-        }
-        return fact;
-    }
-
+   
     
     
-
-    private static long formula( long nF, long d){
-        long result = nF / d;
+    /**
+     * this method calculates the result of the numorator devided by the dinomiator.
+     * @param nF this is n factorised
+     * @param d the result of the denominator. 
+     * @return the result of the numorator devided by the dinominator.
+     */
+    private static PositiveBigInt formula( PositiveBigInt nF, PositiveBigInt d){
+        PositiveBigInt result = nF.div(d);
+        
         return result;
     }
 
