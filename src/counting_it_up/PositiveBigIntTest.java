@@ -47,18 +47,24 @@ class PositiveBigIntTest {
     @Test
     void divTest() {
         assertEquals("1", a.div(a).getValue());
+        assertEquals("1", new PositiveBigInt("4").div(new PositiveBigInt("4")).getValue());
         assertEquals("6", new PositiveBigInt("6").div(new PositiveBigInt("1")).getValue());
         assertEquals("3", new PositiveBigInt("6").div(new PositiveBigInt("2")).getValue());
         assertEquals("1", new PositiveBigInt("9").div(new PositiveBigInt("6")).getValue());
         assertEquals("4", new PositiveBigInt("12").div(new PositiveBigInt("3")).getValue());
         assertEquals("5", new PositiveBigInt("100").div(new PositiveBigInt("20")).getValue());
+        //assertEquals("1000000000", new PositiveBigInt("100000000000").div(new PositiveBigInt("100")).getValue());
+        assertEquals("190", new PositiveBigInt("2432902008176640000").div(new PositiveBigInt("12804747411456000")).getValue());
     }
+
 
     @Test
     void diffTest() {
         assertEquals("16", (new PositiveBigInt("25").diff(new PositiveBigInt("9")).getValue()));
         assertEquals("2", b.diff(a).getValue());
         assertEquals("0", b.diff(b).getValue());
+        assertEquals("9999990", new PositiveBigInt("10000000").diff(new PositiveBigInt("10")).getValue());
+        assertEquals("99999999999999999999", new PositiveBigInt("100000000000000000000").diff(new PositiveBigInt("1")).getValue());
     }
 
     @Test
@@ -68,6 +74,8 @@ class PositiveBigIntTest {
         assertEquals("10", PositiveBigInt.addValues("9", "1"));
         assertEquals("10", PositiveBigInt.addValues("1", "9"));
         assertEquals("11", PositiveBigInt.addValues("1", "10"));
+        assertEquals("111", PositiveBigInt.addValues("1", "110"));
+        assertEquals("110", PositiveBigInt.addValues("0", "110"));
         assertEquals("25", PositiveBigInt.addValues("15", "10"));
     }
 }
