@@ -279,23 +279,22 @@ public class PositiveBigInt {
         int length1 = value.length(), length2 = value2.length();
         int lengthDiff = length1-length2;
         int carry = 0;
-        int currSub;
         for (int i = length2-1; i>=0;i--) {
-            currSub = ((int) value.charAt(i+lengthDiff)- (int) '0') - ((int) value2.charAt(i) - (int) '0') - carry;
+            int currSub = ((int) value.charAt(i+lengthDiff)- (int) '0') - ((int) value2.charAt(i) - (int) '0') - carry;
             if (currSub < 0) {
                 currSub = currSub + 10;
                 carry = 1;
-            }else {
+            } else {
                 carry = 0;
             }
             result.append(currSub);
         }
         for (int j = length1-length2-1; j>=0;j--) {
-            if ((int) value.charAt(j) == 0 && carry > 0) {
-                result.append(9);
+            if (value.charAt(j) == '0' && carry > 0) {
+                result.append("9");
                 continue;
             }
-            currSub = ((int) value.charAt(j) - (int) '0') - carry;
+            int currSub = ((int) value.charAt(j) - (int) '0') - carry;
             if (j > 0 || currSub > 0) {
                 result.append(currSub);
             }
