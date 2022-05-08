@@ -95,8 +95,8 @@ public class CountingItUp {
      */
     public long combinations(PositiveBigInt n, PositiveBigInt k) {
         if (n.isSmallerThan(k)) {
-            return  0;
-        } else if (k.equals(new PositiveBigInt("0"))) {
+            return 0;
+        } else if (k.equals(new PositiveBigInt("0")) || k.equals(n)) {
             return 1;
         } else {
             return parseLong(nthPascalsRow(n.add(new PositiveBigInt("1"))).get(parseInt(k.getValue())).getValue());
