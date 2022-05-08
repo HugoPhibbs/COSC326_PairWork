@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Long.parseLong;
+import static java.lang.Integer.parseInt;
+
 /**
  * Class that does the "Counting it up" program
  */
@@ -26,7 +29,7 @@ public class CountingItUp {
      * @param lines ArrayList containing Strings for input from a user
      */
     private void printCombinations(ArrayList<String> lines) {
-        int[] nkArray;
+        PositiveBigInt[] nkArray;
         for (String line : lines) {
             try {
                 nkArray = parseLine(line);
@@ -36,27 +39,25 @@ public class CountingItUp {
             }
         }
     }
+
     /**
      * Returns a line of input from a user, split into an array for n and k
      *
      * @param line String for input from a user
+     * @return PositiveBigInt array, first element is n, and the second is k
      * @throws IllegalArgumentException if the inputted line is invalid
-     * @return integer array, first element is n, and the second is k
      */
-    private int[] parseLine(String line) throws IllegalArgumentException {
+    private PositiveBigInt[] parseLine(String line) throws IllegalArgumentException {
         String[] splitLine = line.split(" ");
         if (splitLine.length == 2) {
             for (String el : splitLine) {
-                if (!isPositiveInt(el)) {
+                if (!PositiveBigInt.stringIsPositiveInt(el)) {
                     throw new IllegalArgumentException("Values in inputted line must be positive integers!");
                 }
             }
-            int n = (int) Float.parseFloat(splitLine[0]);
-            int k = (int) Float.parseFloat(splitLine[1]);
-            if (k > n) {
-                throw new IllegalArgumentException("k cannot be larger than n!");
-            }
-            return new int[] {n, k};
+            PositiveBigInt n = new PositiveBigInt(splitLine[0]);
+            PositiveBigInt k = new PositiveBigInt(splitLine[1]);
+            return new PositiveBigInt[]{n, k};
         }
         throw new IllegalArgumentException("Line must have 2 parts, one for n, one for k");
     }
@@ -73,7 +74,7 @@ public class CountingItUp {
                 (in the format "n k")
                 Click enter on an empty line to submit""");
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> lines = new ArrayList<String>();
+        ArrayList<String> lines = new ArrayList<>();
         String line = scanner.nextLine();
         while (!line.equals("")) {
             lines.add(line);
@@ -84,28 +85,36 @@ public class CountingItUp {
 
     /**
      * Finds the number of combinations of a given n and k. I.e. finds nCr.
-     *
+     * <p>
      * Finds a max number of combinations up to 64 bits. In practice this is 66C33 = 7219428434016265740 which is just
      * bellow the threshold of 2^63-1
      *
-     * @param n int
-     * @param k int
+     * @param n PositiveBigInt
+     * @param k PositiveBigInt
      * @return long for combinations as described
      */
-    public long combinations(int n, int k) {
-        return nthPascalsRow(n+1).get(k);
+    public long combinations(PositiveBigInt n, PositiveBigInt k) {
+        if (n.isSmallerThan(k)) {
+            return 0;
+        } else if (k.equals(new PositiveBigInt("0"))) {
+            return 1;
+        } else {
+            return parseLong(nthPascalsRow(n.add(new PositiveBigInt("1"))).get(parseInt(k.getValue())).getValue());
+        }
     }
 
     /**
      * Finds the nth row of Pascals triangle
      *
-     * @param n int for nth row
+     * @param n PositiveBigInt for nth row
      * @return ArrayList containing Longs for the nth row
      */
-    private ArrayList<Long> nthPascalsRow(int n) {
-        ArrayList<Long> prevRow = new ArrayList<>(List.of((long) 1));
-        for (int i = 1; i < n; i++) {
+    private ArrayList<PositiveBigInt> nthPascalsRow(PositiveBigInt n) {
+        ArrayList<PositiveBigInt> prevRow = new ArrayList<>(List.of(new PositiveBigInt("1")));
+        PositiveBigInt i = new PositiveBigInt("1");
+        while (i.isSmallerThan(n)) {
             prevRow = createNextRow(prevRow);
+            i.increment();
         }
         return prevRow;
     }
@@ -113,45 +122,16 @@ public class CountingItUp {
     /**
      * Creates the next row of pascals triangle given an inputted previous row
      *
-     * @param prevRow List of Long values for the previous row of pascals triangle
+     * @param prevRow List of PositiveBigInt values for the previous row of pascals triangle
      * @return List containing Longs as described
      */
-    private static ArrayList<Long> createNextRow(List<Long> prevRow) {
-        ArrayList<Long> currRow = new ArrayList<>(prevRow.size() + 1);
-        currRow.add((long) 1);
+    private static ArrayList<PositiveBigInt> createNextRow(ArrayList<PositiveBigInt> prevRow) {
+        ArrayList<PositiveBigInt> currRow = new ArrayList<>(prevRow.size() + 1);
+        currRow.add(new PositiveBigInt("1"));
         for (int i = 1; i < prevRow.size(); i++) {
-            currRow.add(prevRow.get(i - 1) + prevRow.get(i));
+            currRow.add(prevRow.get(i - 1).add(prevRow.get(i)));
         }
-        currRow.add((long) 1);
+        currRow.add(new PositiveBigInt("1"));
         return currRow;
     }
-    /**
-     * Checks if an inputted string is an integer or not
-     *
-     * @param str String to be checked
-     * @return boolean as described
-     */
-    private boolean isInt(String str) {
-        float num;
-        try {
-            num = Float.parseFloat(str);
-        }
-        catch (NumberFormatException nfe) {
-            return false;
-        }
-        return (num == (int) num);
-    }
-
-    /**
-     * Checks if an inputted string is a positive integer or not
-     *
-     * @param str String to be checked
-     * @return boolean as described
-     */
-    private boolean isPositiveInt(String str) {
-        if (isInt(str)) {
-            return (int) Float.parseFloat(str) >= 0;
-        } return false;
-    }
-
 }
