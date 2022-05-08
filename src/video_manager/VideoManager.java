@@ -1,5 +1,7 @@
 package video_manager;
 
+import java.util.ArrayList;
+
 /**
  * VideoManager class
  *
@@ -9,7 +11,11 @@ package video_manager;
  */
 public class VideoManager {
 
-    private static VideoManager instance;
+    private static final VideoManager instance;
+    /**
+     * ArrayList to hold VideoClips that this VideoManager has
+     */
+    private ArrayList<VideoClip> videoClips = new ArrayList<>();
 
     /**
      * Private constructor for a VideoManager
@@ -30,5 +36,35 @@ public class VideoManager {
      */
     public static VideoManager getInstance() {
         return instance;
+    }
+
+    public ArrayList<VideoClip> getVideoClips() {
+        return videoClips;
+    }
+
+    /**
+     * Adds a VideoClip to the VideoManager object
+     *
+     * @param videoClip VideoClip object to be added
+     */
+    public void addVideoClip(VideoClip videoClip) {
+        // TODO enforce uniqueness of entries!
+        videoClips.add(videoClip);
+    }
+
+    /**
+     * Removes a VideoClip from this VideoManager
+     *
+     * @param videoClip VideoClip to be deleted
+     * @return boolean if the inputted videoClip was deleted, false if it wasn't found and deleted
+     */
+    public boolean removeVideoClip(VideoClip videoClip) {
+        for (VideoClip el: videoClips) {
+            if (el.equals(videoClip)) {
+                videoClips.remove(videoClip);
+                return true;
+            }
+        }
+        return false;
     }
 }
