@@ -34,7 +34,7 @@ class PositiveBigIntTest {
 
     @Test
     void addTest() {
-        assertEquals(new PositiveBigInt("0"), new PositiveBigInt("0").add(new PositiveBigInt("1")));
+        assertEquals(new PositiveBigInt("1"), new PositiveBigInt("0").add(new PositiveBigInt("1")));
         assertEquals(new PositiveBigInt("1"), new PositiveBigInt("1").add(new PositiveBigInt("0")));
         assertEquals(new PositiveBigInt("2"), new PositiveBigInt("1").add(new PositiveBigInt("1")));
         assertEquals(new PositiveBigInt("5"), new PositiveBigInt("4").add(new PositiveBigInt("1")));
