@@ -4,14 +4,15 @@ import java.util.ArrayList;
 
 /**
  * VideoManager class
- *
+ * <p>
  * Code for enforcing a single instance is used from:
  * https://stackoverflow.com/questions/27782769/how-to-make-sure-that-there-is-just-one-instance-of-class-in-jvm
- *
+ * <p>
+ * // TODO test that the single instance thing works!
  */
 public class VideoManager {
 
-    private static final VideoManager instance;
+    private static final VideoManager instance = new VideoManager();
     /**
      * ArrayList to hold VideoClips that this VideoManager has
      */
@@ -22,11 +23,9 @@ public class VideoManager {
      *
      */
     private VideoManager() {
-
     }
 
     static {
-        instance = new VideoManager();
     }
 
     /**
@@ -48,8 +47,6 @@ public class VideoManager {
      * @param videoClip VideoClip object to be added
      */
     public void addVideoClip(VideoClip videoClip) {
-        // TODO enforce uniqueness of entries!
-        videoClips.add(videoClip);
     }
 
     /**
@@ -59,12 +56,6 @@ public class VideoManager {
      * @return boolean if the inputted videoClip was deleted, false if it wasn't found and deleted
      */
     public boolean removeVideoClip(VideoClip videoClip) {
-        for (VideoClip el: videoClips) {
-            if (el.equals(videoClip)) {
-                videoClips.remove(videoClip);
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }
