@@ -18,12 +18,12 @@ public class CountingItUpTest {
        }
 @Test
     void kBiggerThenNTest(){
-    assertEquals(0, c.combinations(new PositiveBigInt("1"), new PositiveBigInt("5")));
-    assertEquals(0, c.combinations(new PositiveBigInt("1"), new PositiveBigInt("100")));
-    assertEquals(0, c.combinations(new PositiveBigInt("33"), new PositiveBigInt("66")));
-    assertEquals(0, c.combinations(new PositiveBigInt("4"), new PositiveBigInt("100")));
+        assertEquals(0,  c.combinations(new PositiveBigInt("1"),new PositiveBigInt("5")));
+        assertEquals(0,  c.combinations(new PositiveBigInt("1"),new PositiveBigInt("100")));
+        assertEquals(0,  c.combinations(new PositiveBigInt("33"),new PositiveBigInt("66")));
+        assertEquals(0,  c.combinations(new PositiveBigInt("4"),new PositiveBigInt("100")));
 
-}
+    }
 
     @Test
     void BigNumberTest(){

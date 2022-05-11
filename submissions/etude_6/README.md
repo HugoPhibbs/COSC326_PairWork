@@ -25,7 +25,7 @@
 - To compile, enter in your command console:
 
 ```shell
-javac -d out -cd src src/counting_it_up/CountingItUp.java
+javac -d out -cp src src/counting_it_up/CountingItUp.java
 ```
 
 - Then to run, enter:
