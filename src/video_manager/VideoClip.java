@@ -20,6 +20,6 @@ public class VideoClip {
     }
 
     VideoClip(String videoName) {
-
+        videoFileName = videoName;
     }
 }
