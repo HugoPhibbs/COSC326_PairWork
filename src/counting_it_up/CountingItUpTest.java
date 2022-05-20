@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CountingItUpTest {
     CountingItUp c = new CountingItUp();
 
+    @Test
+    void weirdCasesTest() {
+        // TODO, test where n = k
+    }
 
     @Test
     void combinationsTest() {
@@ -34,5 +38,6 @@ public class CountingItUpTest {
         assertEquals(9202167919706100768L, c.combinations(1733, 7));
         assertEquals(2147483647, c.combinations(2147483647, 1));
         assertEquals(9223372036854775807L, c.combinations(9223372036854775807L, 1));
+        c.combinations(2147483647, 2);
     }
 }
