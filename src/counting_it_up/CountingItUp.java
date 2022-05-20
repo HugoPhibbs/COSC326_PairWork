@@ -1,8 +1,6 @@
 package counting_it_up;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Class that does the "Counting it up" program
@@ -17,7 +15,8 @@ public class CountingItUp {
      * Starts the Counting it up Program
      */
     public void start() {
-        printCombinations(getInput());
+        System.out.println(primeFactorMap(429496721L));
+        //printCombinations(getInput());
     }
 
 
@@ -122,7 +121,7 @@ public class CountingItUp {
      * @param k int
      * @return long for combinations as described
      */
-    public long combinations(long n, int k) {
+    public long combinations(long n, long k) {
         if (n < k) {
             return 0;
         } else if (k == 0 || k == n) {
@@ -130,50 +129,123 @@ public class CountingItUp {
         } else if (k == 1 || n - k == 1) {
             return n;
         } else {
-            return modifiedNthPascalsTriangleRow(n, k).get(k);
+            return combinationsPrimeFact(n, k);
         }
     }
 
     /**
-     * Finds the nth row of a modified Pascals triangle
+     * Finds the number of combinations for a given n and k using prime factorisations
      *
-     * @param rowNum long for row to find
-     * @param k      for k in combinations
-     * @return ArrayList containing Longs
+     * @param n long
+     * @param k long
+     * @return long for combinations as described
      */
-    private ArrayList<Long> modifiedNthPascalsTriangleRow(long rowNum, long k) {
-        int diff = (int) Math.min(k + 1, rowNum - k + 1);
-        ArrayList<Long> prevRow = new ArrayList<>();
-        prevRow.add((long) 1);
-        int currRowNum = 2;
-        while (currRowNum <= rowNum + 1) {
-            prevRow = nextModifiedPascalsRow(prevRow, diff, currRowNum);
-            currRowNum++;
+    private long combinationsPrimeFact(long n, long k) {
+        long effectiveK = Math.min(k, n - k);
+        HashMap<Long, Long> topPrimeMap = limitedFactorialPrimeMap(n, n - effectiveK);
+        Set<Map.Entry<Long, Long>> bottomPrimeMapPairs = limitedFactorialPrimeMap(effectiveK, 0).entrySet();
+        for (Map.Entry<Long, Long> entry : bottomPrimeMapPairs) {
+            topPrimeMap.put(entry.getKey(), topPrimeMap.get(entry.getKey()) - entry.getValue());
         }
-        return prevRow;
-    }
-
-    /**
-     * Creates the next row of a modified Pascals triangle.
-     *
-     * @param prevRow    List contianing Longs
-     * @param diff       int for the width of row to take
-     * @param currRowNum int for next row to be created
-     * @return ArrayList containing Longs
-     */
-    private ArrayList<Long> nextModifiedPascalsRow(List<Long> prevRow, int diff, int currRowNum) {
-        int rowLength = Math.min(diff, currRowNum);
-        ArrayList<Long> currRow = new ArrayList<>();
-        currRow.add((long) 1);
-        int i = 2;
-        while (i <= rowLength) {
-            if (i == currRowNum) {
-                currRow.add((long) 1);
-            } else {
-                currRow.add(prevRow.get(i - 2) + prevRow.get(i - 1));
+        Set<Map.Entry<Long, Long>> topPrimeMapPairs = topPrimeMap.entrySet();
+        long result = 1;
+        for (Map.Entry<Long, Long> entry : topPrimeMapPairs) {
+            if (entry.getValue() > 0) {
+                result *= (powerRec(entry.getKey(), entry.getValue()));
             }
-            i++;
         }
-        return currRow;
+        return result;
+    }
+
+    /**
+     * Computes a^b using recursion.
+     * <p>
+     * Don't want to use Math.pow to avoid any rounding errors with Doubles
+     * <p>
+     * Code shamelessly stolen from:
+     * https://stackoverflow.com/questions/8071363/calculating-powers-of-integers
+     *
+     * @param a long
+     * @param b long
+     * @return long
+     */
+    private long powerRec(long a, long b) {
+        if (b == 0) {
+            return 1;
+        }
+        if (b == 1) {
+            return a;
+        }
+        if (b % 2 == 0) {
+            return powerRec(a * a, b / 2); //even a=(a^2)^b/2
+        } else {
+            return a * powerRec(a * a, b / 2); //odd  a=a*(a^2)^b/2
+        }
+    }
+
+    /**
+     * Finds a HashMap the prime factors of a limited factorial value.
+     * <p>
+     * Limit truncates end terms of a factorial, e.g. limiting 11! with 8, gives 11*10*9
+     * <p>
+     * Limit should be zero in the case of finding the full factorial
+     *
+     * @param x     number to find factorial for
+     * @param limit limiting number of the factorial
+     * @return HashMap with Integer key value pairs for finding the prime factor map
+     */
+    private HashMap<Long, Long> limitedFactorialPrimeMap(long x, long limit) {
+        HashMap<Long, Long> primeMap = new HashMap<>();
+        long i = x;
+        while (i > limit) {
+            addToPrimeMap(primeMap, i);
+            i--;
+        }
+        return primeMap;
+    }
+
+    /**
+     * Adds the prime factors of a given i to a primeMap
+     *
+     * @param primeMap HashMap
+     * @param i        long
+     */
+    private void addToPrimeMap(HashMap<Long, Long> primeMap, long i) {
+        Set<Map.Entry<Long, Long>> iFactorsPairs;
+        iFactorsPairs = primeFactorMap(i).entrySet();
+        for (Map.Entry<Long, Long> entry : iFactorsPairs) {
+            if (!primeMap.containsKey(entry.getKey())) {
+                primeMap.put(entry.getKey(), entry.getValue());
+            } else {
+                primeMap.put(entry.getKey(), entry.getValue() + primeMap.get(entry.getKey()));
+            }
+        }
+    }
+
+    /**
+     * Finds the prime factorisation of a given long number
+     * <p></p>
+     * Code borrowed from https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/.
+     * Uses the sieve of Eratosthenes
+     *
+     * @param n long for a number
+     * @return HashMap, keys are prime numbers, and values are the power of this prime in the factorisation of n
+     */
+    public static HashMap<Long, Long> primeFactorMap(long n) {
+        HashMap<Long, Long> primeFactorMap = new HashMap<>();
+        long c = 2;
+        while (n > 1) {
+            if (n % c == 0) {
+                if (!primeFactorMap.containsKey(c)) {
+                    primeFactorMap.put(c, (long) 1);
+                } else {
+                    primeFactorMap.put(c, primeFactorMap.get(c) + 1);
+                }
+                n /= c;
+            } else {
+                c++;
+            }
+        }
+        return primeFactorMap;
     }
 }
