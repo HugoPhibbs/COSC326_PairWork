@@ -37,11 +37,11 @@ VideoManager.getVideoClips();
   users interact with VideoManager only statically, but also specifically with methods ````addVideoClip(VideoClip)````
   and ```removeVideoClip(VideoClip)```. We decided on this design pattern to make it easy for possible users to add and
   remove VideoClips, minimising the chance that the VideoManager class is misused.
-- To implement this program we thourghly studied design patterns to ensure that only one instance of the video clip
+- To implement this program we thoroughly studied design patterns to ensure that only one instance of the video clip
   manger would ever be created. We decided to use a Singleton Design Pattern as it ensured only one instance is created
-  and provides a global point of access which we used the method getVideoclips to view the video and delete by object.
-  This was implemented using VideoManager which is responisible of creating only one instance of itself and can be
-  accessed directly through the data feild "instance".
+  and provides a global point of access which we used the method getVideoClips() to view the video and delete by object.
+  This was implemented using VideoManager which is responsible for creating only one instance of itself and can be
+  accessed directly through the data field "instance".
 
 ## Possible challenges
 
