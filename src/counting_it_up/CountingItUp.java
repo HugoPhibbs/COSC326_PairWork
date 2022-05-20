@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.Long.parseLong;
-import static java.lang.Integer.parseInt;
-
 /**
  * Class that does the "Counting it up" program
  */
@@ -100,11 +97,11 @@ public class CountingItUp {
      * @return ArrayList for lines of input from a user
      */
     private ArrayList<String> getInput() {
-        System.out.println("""
-                Welcome to counting it up
-                Please enter your values of n and k to compute the number of combinations, one per line
-                (in the format "n k")
-                Click enter on an empty line to submit""");
+        System.out.println(String.join(System.lineSeparator(),
+                "Welcome to counting it up",
+                "Please enter your values of n and k to compute the number of combinations, one per line",
+                "(in the format 'n k')",
+                "Click enter on an empty line to submit"));
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> lines = new ArrayList<>();
         String line = scanner.nextLine();
